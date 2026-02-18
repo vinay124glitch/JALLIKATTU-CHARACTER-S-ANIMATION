@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mersal Bull | Jallikattu Arena</title>
+    <title>Bull Animation Showcase</title>
     <style>
         :root {
+            --accent: #ffb400;
             --primary: #ff3e00;
-            --secondary: #ffb400;
-            --bg: #0a0a0a;
-            --glass: rgba(20, 20, 20, 0.85);
+            --bg: #050505;
+            --panel: rgba(15, 15, 15, 0.9);
         }
 
         *,
@@ -28,7 +28,7 @@
             overflow: hidden;
             background: var(--bg);
             color: #fff;
-            font-family: 'Outfit', -apple-system, sans-serif;
+            font-family: 'Outfit', sans-serif;
         }
 
         #scene-container {
@@ -37,16 +37,15 @@
             position: relative;
         }
 
-        /* ── VIGNETTE ── */
+        /* ── CINEMATIC OVERLAYS ── */
         .vignette {
             position: absolute;
             inset: 0;
             pointer-events: none;
             z-index: 5;
-            background: radial-gradient(circle, transparent 45%, rgba(0, 0, 0, .85) 160%);
+            background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.9) 150%);
         }
 
-        /* ── FLASH OVERLAY ── */
         #flash {
             position: absolute;
             inset: 0;
@@ -63,177 +62,126 @@
             inset: 0;
             z-index: 100;
             pointer-events: none;
-            padding: 2rem;
+            padding: 2.5rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        .title-group {
-            border-left: 4px solid var(--primary);
-            padding-left: 1.2rem;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-left: 5px solid var(--primary);
+            padding-left: 1.5rem;
         }
 
         h1 {
-            font-size: 2.4rem;
+            font-size: 2.8rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(45deg, #fff, var(--secondary));
+            letter-spacing: 4px;
+            line-height: 1;
+            background: linear-gradient(to bottom, #fff, #aaa);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            font-size: .8rem;
-            color: var(--secondary);
+            font-size: .85rem;
+            color: var(--accent);
             font-weight: 600;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
             text-transform: uppercase;
-            margin-top: .2rem;
+            margin-top: .5rem;
         }
 
-        /* ── STATUS BADGE ── */
-        #status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            background: var(--glass);
-            border: 1px solid rgba(255, 255, 255, .1);
-            backdrop-filter: blur(12px);
-            border-radius: 30px;
-            padding: .5rem 1.2rem;
-            font-size: .8rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: all .3s ease;
-        }
-
-        #status-badge .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #4caf50;
-            box-shadow: 0 0 8px #4caf50;
-            animation: pulse-dot 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse-dot {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: .3;
-            }
-        }
-
-        #status-badge.active {
-            background: rgba(255, 62, 0, .3);
-            border-color: var(--primary);
-        }
-
-        #status-badge.active .dot {
-            background: var(--primary);
-            box-shadow: 0 0 12px var(--primary);
-        }
-
-        /* ── FOOTER ── */
-        .footer {
+        /* ── ANIMATION CONTROL CENTER ── */
+        .control-center {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            gap: 1rem;
-        }
-
-        /* ── BUTTON PANEL ── */
-        .btn-panel {
+            flex-direction: column;
+            gap: 1.5rem;
             pointer-events: all;
+            max-width: 500px;
+        }
+
+        .anim-group {
+            background: var(--panel);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .group-label {
+            font-size: .7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 1rem;
             display: flex;
+            align-items: center;
             gap: .8rem;
-            flex-wrap: wrap;
+        }
+
+        .group-label::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: .8rem;
         }
 
         .btn {
-            background: var(--glass);
-            border: 1px solid rgba(255, 255, 255, .15);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: #fff;
-            padding: .75rem 1.4rem;
+            padding: .8rem 1.2rem;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
             font-size: .8rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all .25s cubic-bezier(.4, 0, .2, 1);
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-            backdrop-filter: blur(10px);
+            transition: all .2s cubic-bezier(.4, 0, .2, 1);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 24px rgba(255, 62, 0, .3);
-            background: var(--primary);
-            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            border-color: var(--accent);
         }
 
         .btn.active {
             background: var(--primary);
             border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(255, 62, 0, .5);
+            box-shadow: 0 0 20px rgba(255, 62, 0, 0.4);
         }
 
-        /* Special action buttons */
-        #charge-btn {
-            background: linear-gradient(135deg, #ff3e00, #ff8c00);
-            border-color: #ff8c00;
-            animation: pulse 2s ease-in-out infinite;
+        /* Cinematic Action Buttons */
+        .action-btn {
+            background: linear-gradient(135deg, var(--primary), #cc2200);
+            border: none;
         }
 
-        #kick-btn {
-            background: linear-gradient(135deg, #7b00ff, #c800ff);
-            border-color: #c800ff;
-            animation: pulse 2s ease-in-out infinite;
+        .action-btn::before {
+            content: "⚡";
+            margin-right: 8px;
         }
 
-        @keyframes pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 16px rgba(255, 62, 0, .4);
-            }
-
-            50% {
-                box-shadow: 0 0 32px rgba(255, 62, 0, .8);
-            }
-        }
-
-        /* ── CONTROLS HINT ── */
-        .controls-hint {
-            background: var(--glass);
-            padding: .9rem 1.3rem;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, .08);
-            font-size: .75rem;
-            color: #777;
-            line-height: 1.7;
-        }
-
-        .controls-hint strong {
-            color: var(--secondary);
-            display: block;
-            margin-bottom: .2rem;
-        }
-
-        /* ── LOADER ── */
-        .loader-overlay {
+        /* ── LOADING SCREEN ── */
+        .loader {
             position: absolute;
             inset: 0;
             background: var(--bg);
@@ -242,17 +190,17 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity .8s ease;
+            transition: opacity .6s ease;
         }
 
-        .loader-spinner {
-            width: 56px;
-            height: 56px;
-            border: 4px solid rgba(255, 62, 0, .1);
-            border-top: 4px solid var(--primary);
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.05);
+            border-top-color: var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         @keyframes spin {
@@ -261,19 +209,46 @@
             }
         }
 
-        .progress-bar {
-            width: 200px;
-            height: 2px;
-            background: rgba(255, 255, 255, .1);
-            border-radius: 2px;
-            overflow: hidden;
+        .prog-text {
+            color: var(--accent);
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: .8rem;
         }
 
-        .progress-fill {
-            width: 0%;
-            height: 100%;
+        /* ── STATUS BADGE ── */
+        .status-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: .6rem 1.2rem;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4caf50;
+            box-shadow: 0 0 10px #4caf50;
+        }
+
+        .active-status .dot {
             background: var(--primary);
-            transition: width .3s ease;
+            box-shadow: 0 0 10px var(--primary);
+            animation: blink .8s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0.3;
+            }
         }
 
         .hidden {
@@ -281,363 +256,290 @@
             pointer-events: none !important;
         }
 
-        /* ── CINEMATIC LABELS ── */
-        .cin-label {
+        /* Cinematic Labels */
+        .label-fx {
             position: absolute;
             left: 50%;
-            transform: translateX(-50%);
-            font-size: 5rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 8px;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 300;
-            transition: opacity .15s;
-        }
-
-        #charge-label {
-            top: 48%;
+            transform: translate(-50%, -50%);
+            font-size: 6rem;
+            font-weight: 900;
             color: var(--primary);
-            text-shadow: 0 0 40px rgba(255, 62, 0, .9);
-        }
-
-        #kick-label {
-            top: 40%;
-            color: #c800ff;
-            text-shadow: 0 0 40px rgba(200, 0, 255, .9);
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            opacity: 0;
+            text-shadow: 0 0 40px rgba(255, 62, 0, 0.8);
+            z-index: 300;
+            pointer-events: none;
+            transition: all 0.2s cubic-bezier(.17, .67, .83, .67);
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div id="scene-container">
         <div class="vignette"></div>
         <div id="flash"></div>
-
-        <div class="cin-label" id="charge-label">⚡ CHARGE!</div>
-        <div class="cin-label" id="kick-label">💥 KICK!</div>
+        <div id="fx-label" class="label-fx">CHARGE</div>
 
         <div class="hud">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div class="title-group">
-                    <h1>Mersal Bull</h1>
-                    <div class="subtitle">Jallikattu Arena Simulator</div>
+            <div class="header">
+                <div>
+                    <h1>Bull Animation</h1>
+                    <div class="subtitle">High-Fidelity 3D Showcase</div>
                 </div>
-                <div id="status-badge"><span class="dot"></span><span id="status-text">READY</span></div>
+                <div class="status-badge" id="status-container">
+                    <div class="dot"></div>
+                    <span id="status-text">STANDING BY</span>
+                </div>
             </div>
 
-            <div class="footer">
-                <div class="btn-panel">
-                    <button class="btn" id="charge-btn" onclick="triggerCharge()">⚡ Charge</button>
-                    <button class="btn" id="kick-btn" onclick="triggerKick()">🦵 Back Kick</button>
-                    <div id="bull-anim-row" style="display:flex; gap:.8rem;"></div>
+            <div class="control-center">
+                <!-- CINEMATIC ACTIONS -->
+                <div class="anim-group">
+                    <div class="group-label">Cinematic Moves</div>
+                    <div class="btn-grid">
+                        <button class="btn action-btn" onclick="runAction('charge')">Charge Attack</button>
+                        <button class="btn action-btn" onclick="runAction('kick')">Back Kick</button>
+                    </div>
                 </div>
-                <div class="controls-hint">
-                    <strong>VIEWER CONTROLS</strong>
-                    Rotate: Left Click + Drag<br>
-                    Zoom: Scroll Wheel<br>
-                    Pan: Right Click + Drag
+
+                <!-- GLB BUILT-IN ANIMATIONS -->
+                <div class="anim-group">
+                    <div class="group-label">Built-in Clips</div>
+                    <div class="btn-grid" id="glb-btn-grid">
+                        <!-- Clips injected here -->
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="loader-overlay" id="loader">
-            <div class="loader-spinner"></div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-            <div id="loader-text" style="margin-top:1rem;color:var(--secondary);font-weight:600;">Loading Bull...</div>
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+            <div class="prog-text" id="loader-status">Initializing...</div>
         </div>
     </div>
 
     <script type="importmap">
-{
-    "imports": {
-        "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
+        }
     }
-}
-</script>
+    </script>
     <script type="module">
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
         let scene, camera, renderer, controls, clock;
-        let bullModel, mixer;
-        const glbAnims = new Map();
+        let model, mixer, activeAction;
+        const actions = {};
 
-        let shakeIntensity = 0;
-        let dustPositions, dustVelocities, dustLifetimes, dustGeo, dustMesh;
-        const DUST_COUNT = 300;
-
-        let origCamPos, origCamTarget;
-
-        // Bull States
-        let chargeState = 'idle'; // idle|windup|sprint|brake|reset
-        let chargeT = 0, bullStartPos, bullTargetPos;
-        let kickState = 'idle';   // idle|lean|lift|snap|recoil|settle
-        let kickT = 0, kickStartRotX = 0;
-        let legBoneL, legBoneR, hoofBoneL, hoofBoneR;
+        // States
+        let isPerforming = false;
+        let shake = 0;
 
         init();
 
-        async function init() {
+        function init() {
             clock = new THREE.Clock();
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a0a0a);
-            scene.fog = new THREE.FogExp2(0x0a0a0a, 0.04);
+            scene.background = new THREE.Color(0x050505);
+            scene.fog = new THREE.FogExp2(0x050505, 0.05);
 
-            camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 500);
-            camera.position.set(0, 2.5, 10);
-            origCamPos = camera.position.clone();
-            origCamTarget = new THREE.Vector3(0, 1.5, 0);
+            camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 3, 12);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(innerWidth, innerHeight);
-            renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             document.getElementById('scene-container').appendChild(renderer.domElement);
 
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
-            controls.target.copy(origCamTarget);
+            controls.target.set(0, 1.5, 0);
 
-            setupLights();
-            setupEnvironment();
-            setupDust();
+            // Lights
+            const ambient = new THREE.AmbientLight(0xffffff, 0.2);
+            scene.add(ambient);
 
-            const loader = new GLTFLoader();
-            const fill = document.getElementById('progress-fill');
-            loader.load('./bull.glb', (gltf) => {
-                bullModel = gltf.scene;
+            const spot1 = new THREE.SpotLight(0xffffff, 80);
+            spot1.position.set(10, 15, 10);
+            spot1.castShadow = true;
+            scene.add(spot1);
 
-                // Fit to ground and scale
-                const box = new THREE.Box3().setFromObject(bullModel);
-                const size = box.getSize(new THREE.Vector3());
-                bullModel.scale.setScalar(3.2 / size.y);
-                const box2 = new THREE.Box3().setFromObject(bullModel);
-                bullModel.position.y = -box2.min.y;
-                bullModel.position.x = 0;
-                bullModel.position.z = 0;
-                bullModel.rotation.y = Math.PI;
-
-                bullModel.traverse(c => { if (c.isMesh) c.castShadow = c.receiveShadow = true; });
-                scene.add(bullModel);
-                bullStartPos = bullModel.position.clone();
-
-                // Leg bones for kick dust
-                legBoneL = new THREE.Object3D(); legBoneR = new THREE.Object3D();
-                hoofBoneL = new THREE.Object3D(); hoofBoneR = new THREE.Object3D();
-                const b = new THREE.Box3().setFromObject(bullModel).getSize(new THREE.Vector3());
-                legBoneL.position.set(-b.x * .22, b.y * .35, b.z * .38);
-                legBoneR.position.set(b.x * .22, b.y * .35, b.z * .38);
-                hoofBoneL.position.set(0, -b.y * .35, 0);
-                hoofBoneR.position.set(0, -b.y * .35, 0);
-                legBoneL.add(hoofBoneL); legBoneR.add(hoofBoneR);
-                bullModel.add(legBoneL); bullModel.add(legBoneR);
-
-                if (gltf.animations?.length) {
-                    mixer = new THREE.AnimationMixer(bullModel);
-                    const row = document.getElementById('bull-anim-row');
-                    gltf.animations.forEach((clip, i) => {
-                        const action = mixer.clipAction(clip);
-                        glbAnims.set(clip.name, action);
-                        const btn = document.createElement('button');
-                        btn.className = 'btn';
-                        btn.innerHTML = `◈ ${clip.name || 'Anim ' + (i + 1)}`;
-                        btn.onclick = () => {
-                            playGLBAnim(clip.name);
-                            row.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-                            btn.classList.add('active');
-                        };
-                        row.appendChild(btn);
-                        if (i === 0) { btn.classList.add('active'); playGLBAnim(clip.name); }
-                    });
-                }
-
-                setTimeout(() => document.getElementById('loader').classList.add('hidden'), 500);
-            }, (xhr) => {
-                fill.style.width = (xhr.loaded / xhr.total * 100) + '%';
-            });
-
-            window.addEventListener('resize', () => {
-                camera.aspect = innerWidth / innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(innerWidth, innerHeight);
-            });
-
-            animate();
-        }
-
-        function setupLights() {
-            scene.add(new THREE.AmbientLight(0xffffff, 0.3));
-            const sun = new THREE.DirectionalLight(0xfff5e0, 2);
-            sun.position.set(10, 20, 10);
-            sun.castShadow = true;
-            scene.add(sun);
-            const rim = new THREE.SpotLight(0xff4d00, 50, 40, 0.5, 0.1);
-            rim.position.set(-10, 10, -5);
+            const rim = new THREE.SpotLight(0xff3e00, 40);
+            rim.position.set(-10, 5, -5);
             scene.add(rim);
-        }
 
-        function setupEnvironment() {
-            const ground = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.MeshStandardMaterial({ color: 0x1a1008 }));
+            // Ground
+            const ground = new THREE.Mesh(
+                new THREE.PlaneGeometry(100, 100),
+                new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 })
+            );
             ground.rotation.x = -Math.PI / 2;
             ground.receiveShadow = true;
             scene.add(ground);
-            const grid = new THREE.GridHelper(80, 60, 0xff4d00, 0x1a1008);
-            grid.material.opacity = 0.1; grid.material.transparent = true;
+
+            const grid = new THREE.GridHelper(40, 40, 0xff3e00, 0x111111);
+            grid.material.opacity = 0.05; grid.material.transparent = true;
             scene.add(grid);
+
+            loadModel();
+
+            window.addEventListener('resize', onResize);
+            animate();
         }
 
-        function setupDust() {
-            dustPositions = new Float32Array(DUST_COUNT * 3);
-            dustVelocities = [];
-            dustLifetimes = new Float32Array(DUST_COUNT);
-            for (let i = 0; i < DUST_COUNT; i++) {
-                dustPositions[i * 3] = dustPositions[i * 3 + 2] = 9999;
-                dustVelocities.push(new THREE.Vector3());
-            }
-            dustGeo = new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
-            dustMesh = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0xc8a060, size: 0.1, transparent: true, opacity: 0.6 }));
-            scene.add(dustMesh);
+        function loadModel() {
+            const loader = new GLTFLoader();
+            const status = document.getElementById('loader-status');
+
+            loader.load('./bull.glb', (gltf) => {
+                model = gltf.scene;
+
+                // Centering & Scaling
+                const box = new THREE.Box3().setFromObject(model);
+                const size = box.getSize(new THREE.Vector3());
+                model.scale.setScalar(3.5 / size.y);
+                const boxAdjusted = new THREE.Box3().setFromObject(model);
+                model.position.y = -boxAdjusted.min.y;
+                model.rotation.y = Math.PI;
+
+                model.traverse(node => { if (node.isMesh) node.castShadow = node.receiveShadow = true; });
+                scene.add(model);
+
+                // Animations
+                mixer = new THREE.AnimationMixer(model);
+                const grid = document.getElementById('glb-btn-grid');
+
+                gltf.animations.forEach((clip, i) => {
+                    const action = mixer.clipAction(clip);
+                    actions[clip.name] = action;
+
+                    const btn = document.createElement('button');
+                    btn.className = 'btn';
+                    btn.innerText = clip.name || `Clip ${i + 1}`;
+                    btn.onclick = () => playClip(clip.name, btn);
+                    grid.appendChild(btn);
+
+                    if (i === 0) { btn.classList.add('active'); action.play(); activeAction = action; }
+                });
+
+                document.getElementById('loader').classList.add('hidden');
+            },
+                (xhr) => { status.innerText = `Loading: ${Math.round(xhr.loaded / xhr.total * 100)}%`; },
+                (err) => { status.innerText = "Error Loading Model"; status.style.color = "red"; });
         }
 
-        function spawnDust(origin, count = 40) {
-            let n = 0;
-            for (let i = 0; i < DUST_COUNT && n < count; i++) {
-                if (dustLifetimes[i] <= 0) {
-                    dustPositions[i * 3] = origin.x + (Math.random() - .5);
-                    dustPositions[i * 3 + 2] = origin.z + (Math.random() - .5);
-                    dustVelocities[i].set((Math.random() - .5) * 2, Math.random() * 2 + .5, (Math.random() - .5) * 2);
-                    dustLifetimes[i] = .8 + Math.random();
-                    n++;
+        function playClip(name, btn) {
+            if (isPerforming) return;
+            const next = actions[name];
+            if (activeAction === next) return;
+
+            document.querySelectorAll('#glb-btn-grid .btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (activeAction) activeAction.fadeOut(0.4);
+            next.reset().fadeIn(0.4).play();
+            activeAction = next;
+        }
+
+        // Action Logic (Simplified Procedural)
+        window.runAction = async (type) => {
+            if (isPerforming || !model) return;
+            isPerforming = true;
+
+            const statusText = document.getElementById('status-text');
+            const statusContainer = document.getElementById('status-container');
+            const fxLabel = document.getElementById('fx-label');
+            const flashEl = document.getElementById('flash');
+
+            statusText.innerText = type === 'charge' ? "CHARGING" : "KICKING";
+            statusContainer.classList.add('active-status');
+
+            if (activeAction) activeAction.fadeOut(0.2);
+
+            if (type === 'charge') {
+                fxLabel.innerText = "CHARGE";
+                // Windup
+                const startPos = model.position.clone();
+                for (let i = 0; i < 30; i++) {
+                    model.rotation.x += 0.01;
+                    await sleep(10);
                 }
-            }
-        }
 
-        function updateDust(dt) {
-            let changed = false;
-            for (let i = 0; i < DUST_COUNT; i++) {
-                if (dustLifetimes[i] > 0) {
-                    dustLifetimes[i] -= dt;
-                    dustPositions[i * 3] += dustVelocities[i].x * dt;
-                    dustPositions[i * 3 + 1] += dustVelocities[i].y * dt;
-                    dustPositions[i * 3 + 2] += dustVelocities[i].z * dt;
-                    dustVelocities[i].y -= 3 * dt;
-                    if (dustLifetimes[i] <= 0) dustPositions[i * 3] = dustPositions[i * 3 + 2] = 9999;
-                    changed = true;
+                // Attack
+                fxLabel.style.opacity = 1;
+                flashEl.style.opacity = 0.5;
+                setTimeout(() => { flashEl.style.opacity = 0; }, 50);
+                shake = 0.4;
+
+                for (let i = 0; i < 20; i++) {
+                    model.position.z -= 0.5;
+                    model.rotation.x -= 0.04;
+                    await sleep(16);
                 }
+
+                // Recovery
+                statusText.innerText = "RECOVERING";
+                await sleep(500);
+                model.position.copy(startPos);
+                model.rotation.x = 0;
+            } else {
+                fxLabel.innerText = "KICK";
+                // Lean
+                for (let i = 0; i < 20; i++) {
+                    model.rotation.x -= 0.015;
+                    await sleep(16);
+                }
+                // Snap
+                fxLabel.style.opacity = 1;
+                flashEl.style.opacity = 0.8;
+                flashEl.style.backgroundColor = "#7b00ff";
+                setTimeout(() => { flashEl.style.opacity = 0; }, 80);
+                shake = 0.6;
+
+                for (let i = 0; i < 10; i++) {
+                    model.rotation.x += 0.06;
+                    await sleep(10);
+                }
+                await sleep(600);
+                model.rotation.x = 0;
             }
-            if (changed) dustGeo.attributes.position.needsUpdate = true;
-        }
 
-        function flash(intensity, color = '#ff3e00') {
-            const f = document.getElementById('flash');
-            f.style.background = color; f.style.opacity = intensity;
-            setTimeout(() => f.style.opacity = 0, 80);
-        }
+            fxLabel.style.opacity = 0;
+            if (activeAction) activeAction.fadeIn(0.5).play();
 
-        function showLabel(id) {
-            const l = document.getElementById(id);
-            l.style.opacity = 1; setTimeout(() => l.style.opacity = 0, 800);
-        }
-
-        function setStatus(t, a) {
-            document.getElementById('status-text').innerText = t;
-            const b = document.getElementById('status-badge');
-            a ? b.classList.add('active') : b.classList.remove('active');
-        }
-
-        let activeAnim = null;
-        function playGLBAnim(name) {
-            const next = glbAnims.get(name);
-            if (!next || activeAnim === next) return;
-            if (activeAnim) activeAnim.fadeOut(0.3);
-            next.reset().fadeIn(0.3).play();
-            activeAnim = next;
-        }
-
-        window.triggerCharge = function () {
-            if (chargeState !== 'idle' || kickState !== 'idle' || !bullModel) return;
-            chargeState = 'windup'; chargeT = 0;
-            bullStartPos = bullModel.position.clone();
-            bullTargetPos = bullModel.position.clone().add(new THREE.Vector3(0, 0, -18));
-            setStatus('WINDING UP...', true);
-            origCamPos = camera.position.clone();
-            origCamTarget = controls.target.clone();
+            statusText.innerText = "STANDING BY";
+            statusContainer.classList.remove('active-status');
+            isPerforming = false;
         };
 
-        function updateCharge(dt) {
-            if (!bullModel || chargeState === 'idle') return;
-            chargeT += dt;
-            if (chargeState === 'windup') {
-                bullModel.rotation.x = THREE.MathUtils.lerp(0, .3, chargeT / 1.2);
-                if (chargeT >= 1.2) { chargeState = 'sprint'; chargeT = 0; flash(.6); showLabel('charge-label'); shakeIntensity = .2; setStatus('CHARGING!', true); }
-            } else if (chargeState === 'sprint') {
-                const ease = easeIn(chargeT / 1.4);
-                bullModel.position.lerpVectors(bullStartPos, bullTargetPos, ease);
-                bullModel.position.y = bullStartPos.y + Math.abs(Math.sin(chargeT * 15)) * .1;
-                if (Math.random() < .6) spawnDust(bullModel.position, 10);
-                if (chargeT >= 1.4) { chargeState = 'brake'; chargeT = 0; flash(1); shakeIntensity = .5; spawnDust(bullModel.position, 100); setStatus('IMPACT!', true); }
-            } else if (chargeState === 'brake') {
-                bullModel.rotation.x = THREE.MathUtils.lerp(.3, 0, chargeT / .8);
-                if (chargeT >= .8) { chargeState = 'reset'; chargeT = 0; setStatus('RESETTING...', false); }
-            } else if (chargeState === 'reset') {
-                bullModel.position.lerp(bullStartPos, .05);
-                camera.position.lerp(origCamPos, .05);
-                if (chargeT >= 2 && bullModel.position.distanceTo(bullStartPos) < .1) {
-                    bullModel.position.copy(bullStartPos); bullModel.rotation.x = 0;
-                    chargeState = 'idle'; setStatus('READY', false);
-                }
-            }
+        function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+        function onResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        window.triggerKick = function () {
-            if (kickState !== 'idle' || chargeState !== 'idle' || !bullModel) return;
-            kickState = 'lean'; kickT = 0; setStatus('KICK WINDUP...', true);
-        }
-
-        function updateKick(dt) {
-            if (!bullModel || kickState === 'idle') return;
-            kickT += dt;
-            if (kickState === 'lean') {
-                bullModel.rotation.x = THREE.MathUtils.lerp(0, -.3, kickT / .5);
-                if (kickT >= .5) { kickState = 'lift'; kickT = 0; }
-            } else if (kickState === 'lift') {
-                if (legBoneL) { legBoneL.rotation.x = THREE.MathUtils.lerp(0, -1.4, kickT / .4); legBoneR.rotation.x = legBoneL.rotation.x; }
-                if (kickT >= .4) { kickState = 'snap'; kickT = 0; }
-            } else if (kickState === 'snap') {
-                if (legBoneL) { legBoneL.rotation.x = THREE.MathUtils.lerp(-1.4, .9, kickT / .2); legBoneR.rotation.x = legBoneL.rotation.x; }
-                if (kickT >= .1 && kickT < .12) {
-                    flash(.7, '#7b00ff'); showLabel('kick-label'); shakeIntensity = .6;
-                    const wL = new THREE.Vector3(); hoofBoneL.getWorldPosition(wL); spawnDust(wL, 80);
-                }
-                if (kickT >= .2) { kickState = 'recoil'; kickT = 0; }
-            } else if (kickState === 'recoil') {
-                if (legBoneL) { legBoneL.rotation.x = THREE.MathUtils.lerp(.9, 0, kickT / .5); legBoneR.rotation.x = legBoneL.rotation.x; }
-                bullModel.rotation.x = THREE.MathUtils.lerp(-.3, 0, kickT / .5);
-                if (kickT >= .5) { kickState = 'idle'; setStatus('READY', false); }
-            }
-        }
-
-        const easeIn = t => t * t * t;
         function animate() {
             requestAnimationFrame(animate);
-            const dt = Math.min(clock.getDelta(), .05);
-            if (mixer) mixer.update(dt);
+            const delta = clock.getDelta();
+            if (mixer) mixer.update(delta);
             controls.update();
-            updateDust(dt);
-            updateCharge(dt);
-            updateKick(dt);
-            if (shakeIntensity > 0) {
-                camera.position.x += (Math.random() - .5) * shakeIntensity;
-                shakeIntensity *= .9;
+
+            if (shake > 0) {
+                camera.position.x += (Math.random() - 0.5) * shake;
+                camera.position.y += (Math.random() - 0.5) * shake;
+                shake *= 0.9;
             }
+
             renderer.render(scene, camera);
         }
     </script>
