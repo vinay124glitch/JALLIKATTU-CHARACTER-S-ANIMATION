@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jallikattu Arena | Bull & Human</title>
+    <title>Mersal Bull | Jallikattu Arena</title>
     <style>
         :root {
-            --bull-color: #ff3e00;
-            --human-color: #00c8ff;
-            --bg: #080808;
-            --glass: rgba(12, 12, 12, 0.85);
+            --primary: #ff3e00;
+            --secondary: #ffb400;
+            --bg: #0a0a0a;
+            --glass: rgba(20, 20, 20, 0.85);
         }
 
         *,
@@ -43,15 +43,16 @@
             inset: 0;
             pointer-events: none;
             z-index: 5;
-            background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, .9) 160%);
+            background: radial-gradient(circle, transparent 45%, rgba(0, 0, 0, .85) 160%);
         }
 
-        /* ── FLASH ── */
+        /* ── FLASH OVERLAY ── */
         #flash {
             position: absolute;
             inset: 0;
             pointer-events: none;
             z-index: 200;
+            background: #ff3e00;
             opacity: 0;
             transition: opacity 0.05s;
         }
@@ -62,38 +63,31 @@
             inset: 0;
             z-index: 100;
             pointer-events: none;
-            padding: 1.8rem 2rem;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        /* ── HEADER ── */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
         .title-group {
-            border-left: 4px solid var(--bull-color);
+            border-left: 4px solid var(--primary);
             padding-left: 1.2rem;
         }
 
         h1 {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
-            background: linear-gradient(45deg, #fff, #ffb400);
+            background: linear-gradient(45deg, #fff, var(--secondary));
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            font-size: .75rem;
-            color: #ffb400;
+            font-size: .8rem;
+            color: var(--secondary);
             font-weight: 600;
             letter-spacing: 4px;
             text-transform: uppercase;
@@ -110,11 +104,11 @@
             backdrop-filter: blur(12px);
             border-radius: 30px;
             padding: .5rem 1.2rem;
-            font-size: .75rem;
-            font-weight: 700;
+            font-size: .8rem;
+            font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            transition: all .3s;
+            transition: all .3s ease;
         }
 
         #status-badge .dot {
@@ -139,13 +133,13 @@
         }
 
         #status-badge.active {
-            background: rgba(255, 62, 0, .25);
-            border-color: var(--bull-color);
+            background: rgba(255, 62, 0, .3);
+            border-color: var(--primary);
         }
 
         #status-badge.active .dot {
-            background: var(--bull-color);
-            box-shadow: 0 0 12px var(--bull-color);
+            background: var(--primary);
+            box-shadow: 0 0 12px var(--primary);
         }
 
         /* ── FOOTER ── */
@@ -154,130 +148,61 @@
             justify-content: space-between;
             align-items: flex-end;
             gap: 1rem;
-            flex-wrap: wrap;
         }
 
-        /* ── PANELS ── */
-        .panels {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
+        /* ── BUTTON PANEL ── */
+        .btn-panel {
             pointer-events: all;
+            display: flex;
+            gap: .8rem;
+            flex-wrap: wrap;
         }
 
-        .panel {
+        .btn {
             background: var(--glass);
-            border-radius: 14px;
-            backdrop-filter: blur(14px);
-            padding: 1rem 1.2rem;
-            border: 1px solid rgba(255, 255, 255, .08);
-            min-width: 200px;
-        }
-
-        .panel-title {
-            font-size: .65rem;
+            border: 1px solid rgba(255, 255, 255, .15);
+            color: #fff;
+            padding: .75rem 1.4rem;
+            border-radius: 10px;
+            cursor: pointer;
             font-weight: 700;
-            letter-spacing: 3px;
+            font-size: .8rem;
             text-transform: uppercase;
-            margin-bottom: .7rem;
+            letter-spacing: 1px;
+            transition: all .25s cubic-bezier(.4, 0, .2, 1);
             display: flex;
             align-items: center;
             gap: .5rem;
-        }
-
-        .panel-title .bar {
-            width: 3px;
-            height: 14px;
-            border-radius: 2px;
-        }
-
-        .panel-title.bull-title .bar {
-            background: var(--bull-color);
-        }
-
-        .panel-title.human-title .bar {
-            background: var(--human-color);
-        }
-
-        .panel-title.bull-title {
-            color: var(--bull-color);
-        }
-
-        .panel-title.human-title {
-            color: var(--human-color);
-        }
-
-        .btn-row {
-            display: flex;
-            gap: .6rem;
-            flex-wrap: wrap;
-        }
-
-        /* ── BUTTONS ── */
-        .btn {
-            background: rgba(255, 255, 255, .06);
-            border: 1px solid rgba(255, 255, 255, .12);
-            color: #fff;
-            padding: .6rem 1.1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: .72rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all .22s cubic-bezier(.4, 0, .2, 1);
-            display: flex;
-            align-items: center;
-            gap: .4rem;
+            backdrop-filter: blur(10px);
         }
 
         .btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(255, 62, 0, .3);
+            background: var(--primary);
+            border-color: var(--primary);
         }
 
-        .btn:disabled {
-            opacity: .4;
-            cursor: not-allowed;
-            transform: none !important;
-            animation: none !important;
-        }
-
-        /* Bull buttons */
-        .bull-btn:hover {
-            background: var(--bull-color);
-            border-color: var(--bull-color);
-            box-shadow: 0 8px 20px rgba(255, 62, 0, .35);
-        }
-
-        .bull-btn.active {
-            background: var(--bull-color);
-            border-color: var(--bull-color);
-            box-shadow: 0 0 16px rgba(255, 62, 0, .5);
-        }
-
-        /* Human buttons */
-        .human-btn:hover {
-            background: var(--human-color);
-            border-color: var(--human-color);
-            box-shadow: 0 8px 20px rgba(0, 200, 255, .35);
-            color: #000;
-        }
-
-        .human-btn.active {
-            background: var(--human-color);
-            border-color: var(--human-color);
-            box-shadow: 0 0 16px rgba(0, 200, 255, .5);
-            color: #000;
+        .btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(255, 62, 0, .5);
         }
 
         /* Special action buttons */
         #charge-btn {
             background: linear-gradient(135deg, #ff3e00, #ff8c00);
             border-color: #ff8c00;
-            animation: bull-pulse 2s ease-in-out infinite;
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        @keyframes bull-pulse {
+        #kick-btn {
+            background: linear-gradient(135deg, #7b00ff, #c800ff);
+            border-color: #c800ff;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
 
             0%,
             100% {
@@ -289,76 +214,20 @@
             }
         }
 
-        #kick-btn {
-            background: linear-gradient(135deg, #7b00ff, #c800ff);
-            border-color: #c800ff;
-            animation: kick-pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes kick-pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 16px rgba(123, 0, 255, .4);
-            }
-
-            50% {
-                box-shadow: 0 0 32px rgba(123, 0, 255, .8);
-            }
-        }
-
-        #run-btn {
-            background: linear-gradient(135deg, #0080ff, #00c8ff);
-            border-color: #00c8ff;
-            animation: run-pulse 2s ease-in-out infinite;
-            color: #000;
-        }
-
-        @keyframes run-pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 16px rgba(0, 200, 255, .4);
-            }
-
-            50% {
-                box-shadow: 0 0 32px rgba(0, 200, 255, .8);
-            }
-        }
-
-        #dodge-btn {
-            background: linear-gradient(135deg, #00c853, #69ff47);
-            border-color: #69ff47;
-            animation: dodge-pulse 2s ease-in-out infinite;
-            color: #000;
-        }
-
-        @keyframes dodge-pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 16px rgba(0, 200, 83, .4);
-            }
-
-            50% {
-                box-shadow: 0 0 32px rgba(0, 200, 83, .8);
-            }
-        }
-
         /* ── CONTROLS HINT ── */
         .controls-hint {
             background: var(--glass);
-            padding: .8rem 1.1rem;
+            padding: .9rem 1.3rem;
             border-radius: 10px;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, .07);
-            font-size: .7rem;
-            color: #666;
+            border: 1px solid rgba(255, 255, 255, .08);
+            font-size: .75rem;
+            color: #777;
             line-height: 1.7;
         }
 
         .controls-hint strong {
-            color: #ffb400;
+            color: var(--secondary);
             display: block;
             margin-bottom: .2rem;
         }
@@ -377,10 +246,10 @@
         }
 
         .loader-spinner {
-            width: 52px;
-            height: 52px;
+            width: 56px;
+            height: 56px;
             border: 4px solid rgba(255, 62, 0, .1);
-            border-top: 4px solid #ff3e00;
+            border-top: 4px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 1.5rem;
@@ -393,18 +262,17 @@
         }
 
         .progress-bar {
-            width: 220px;
+            width: 200px;
             height: 2px;
             background: rgba(255, 255, 255, .1);
             border-radius: 2px;
             overflow: hidden;
-            margin-bottom: .8rem;
         }
 
         .progress-fill {
             width: 0%;
             height: 100%;
-            background: #ff3e00;
+            background: var(--primary);
             transition: width .3s ease;
         }
 
@@ -418,7 +286,7 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 4.5rem;
+            font-size: 5rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 8px;
@@ -430,7 +298,7 @@
 
         #charge-label {
             top: 48%;
-            color: #ff3e00;
+            color: var(--primary);
             text-shadow: 0 0 40px rgba(255, 62, 0, .9);
         }
 
@@ -439,53 +307,6 @@
             color: #c800ff;
             text-shadow: 0 0 40px rgba(200, 0, 255, .9);
         }
-
-        #run-label {
-            top: 44%;
-            color: #00c8ff;
-            text-shadow: 0 0 40px rgba(0, 200, 255, .9);
-        }
-
-        #dodge-label {
-            top: 44%;
-            color: #00c853;
-            text-shadow: 0 0 40px rgba(0, 200, 83, .9);
-        }
-
-        /* ── HOOF / FOOT TRAILS ── */
-        .trail-dot {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 250;
-            animation: trail-fade .5s ease-out forwards;
-        }
-
-        @keyframes trail-fade {
-            from {
-                opacity: .9;
-                transform: scale(1);
-            }
-
-            to {
-                opacity: 0;
-                transform: scale(3);
-            }
-        }
-
-        /* ── DIVIDER LINE between models ── */
-        #divider {
-            position: absolute;
-            top: 10%;
-            bottom: 10%;
-            left: 50%;
-            width: 1px;
-            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, .15), transparent);
-            pointer-events: none;
-            z-index: 6;
-        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
@@ -493,51 +314,26 @@
 <body>
     <div id="scene-container">
         <div class="vignette"></div>
-        <div id="divider"></div>
         <div id="flash"></div>
 
-        <!-- Cinematic Labels -->
         <div class="cin-label" id="charge-label">⚡ CHARGE!</div>
         <div class="cin-label" id="kick-label">💥 KICK!</div>
-        <div class="cin-label" id="run-label">🏃 RUN!</div>
-        <div class="cin-label" id="dodge-label">💨 DODGE!</div>
 
         <div class="hud">
-            <!-- HEADER -->
-            <div class="header">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div class="title-group">
-                    <h1>Jallikattu Arena</h1>
-                    <div class="subtitle">Bull vs Human · Live Simulation</div>
+                    <h1>Mersal Bull</h1>
+                    <div class="subtitle">Jallikattu Arena Simulator</div>
                 </div>
                 <div id="status-badge"><span class="dot"></span><span id="status-text">READY</span></div>
             </div>
 
-            <!-- FOOTER: two panels -->
             <div class="footer">
-                <div class="panels">
-
-                    <!-- BULL PANEL -->
-                    <div class="panel">
-                        <div class="panel-title bull-title"><span class="bar"></span>🐂 Bull Actions</div>
-                        <div class="btn-row">
-                            <button class="btn bull-btn" id="charge-btn" onclick="triggerCharge()">⚡ Charge</button>
-                            <button class="btn bull-btn" id="kick-btn" onclick="triggerKick()">🦵 Back Kick</button>
-                        </div>
-                        <div class="btn-row" id="bull-anim-row" style="margin-top:.5rem;"></div>
-                    </div>
-
-                    <!-- HUMAN PANEL -->
-                    <div class="panel">
-                        <div class="panel-title human-title"><span class="bar"></span>🧍 Human Actions</div>
-                        <div class="btn-row">
-                            <button class="btn human-btn" id="run-btn" onclick="triggerRun()">🏃 Run</button>
-                            <button class="btn human-btn" id="dodge-btn" onclick="triggerDodge()">💨 Dodge</button>
-                        </div>
-                        <div class="btn-row" id="human-anim-row" style="margin-top:.5rem;"></div>
-                    </div>
-
+                <div class="btn-panel">
+                    <button class="btn" id="charge-btn" onclick="triggerCharge()">⚡ Charge</button>
+                    <button class="btn" id="kick-btn" onclick="triggerKick()">🦵 Back Kick</button>
+                    <div id="bull-anim-row" style="display:flex; gap:.8rem;"></div>
                 </div>
-
                 <div class="controls-hint">
                     <strong>VIEWER CONTROLS</strong>
                     Rotate: Left Click + Drag<br>
@@ -547,15 +343,12 @@
             </div>
         </div>
 
-        <!-- LOADER -->
         <div class="loader-overlay" id="loader">
             <div class="loader-spinner"></div>
-            <div style="color:#555;font-size:.75rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.5rem;">
-                Preparing the Arena</div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progress-fill"></div>
             </div>
-            <div id="loader-text" style="color:#ffb400;font-weight:600;font-size:.9rem;">Loading Models...</div>
+            <div id="loader-text" style="margin-top:1rem;color:var(--secondary);font-weight:600;">Loading Bull...</div>
         </div>
     </div>
 
@@ -572,53 +365,33 @@
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        /* ═══════════════════════════════════════
-           GLOBALS
-        ═══════════════════════════════════════ */
         let scene, camera, renderer, controls, clock;
-        let bullModel, humanModel;
-        let bullMixer, humanMixer;
-        const bullAnims = new Map();
-        const humanAnims = new Map();
+        let bullModel, mixer;
+        const glbAnims = new Map();
 
-        // Shared shake
         let shakeIntensity = 0;
-
-        // Dust / trail particles
         let dustPositions, dustVelocities, dustLifetimes, dustGeo, dustMesh;
-        const DUST_COUNT = 400;
+        const DUST_COUNT = 300;
 
-        // Saved camera
         let origCamPos, origCamTarget;
 
-        /* ── BULL state ── */
+        // Bull States
         let chargeState = 'idle'; // idle|windup|sprint|brake|reset
         let chargeT = 0, bullStartPos, bullTargetPos;
         let kickState = 'idle';   // idle|lean|lift|snap|recoil|settle
         let kickT = 0, kickStartRotX = 0;
         let legBoneL, legBoneR, hoofBoneL, hoofBoneR;
 
-        /* ── HUMAN state ── */
-        let runState = 'idle';  // idle|accel|sprint|stop
-        let runT = 0, humanStartPos, humanTargetPos;
-        let dodgeState = 'idle'; // idle|crouch|leap|land|rise
-        let dodgeT = 0, dodgeStartPos;
-        let footBoneL, footBoneR;
-
-        /* ═══════════════════════════════════════
-           INIT
-        ═══════════════════════════════════════ */
         init();
 
         async function init() {
             clock = new THREE.Clock();
-
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x080808);
-            scene.fog = new THREE.FogExp2(0x080808, 0.035);
+            scene.background = new THREE.Color(0x0a0a0a);
+            scene.fog = new THREE.FogExp2(0x0a0a0a, 0.04);
 
-            camera = new THREE.PerspectiveCamera(44, innerWidth / innerHeight, 0.1, 500);
-            camera.position.set(0, 3, 14);
+            camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 500);
+            camera.position.set(0, 2.5, 10);
             origCamPos = camera.position.clone();
             origCamTarget = new THREE.Vector3(0, 1.5, 0);
 
@@ -626,52 +399,70 @@
             renderer.setSize(innerWidth, innerHeight);
             renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.1;
             renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             document.getElementById('scene-container').appendChild(renderer.domElement);
 
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
-            controls.dampingFactor = 0.06;
             controls.target.copy(origCamTarget);
-            controls.maxDistance = 30;
-            controls.minDistance = 2;
 
             setupLights();
             setupEnvironment();
             setupDust();
 
-            // Load both models in parallel
+            const loader = new GLTFLoader();
             const fill = document.getElementById('progress-fill');
-            const txt = document.getElementById('loader-text');
+            loader.load('./bull.glb', (gltf) => {
+                bullModel = gltf.scene;
 
-            let bullDone = false, humanDone = false;
-            function checkDone() {
-                if (bullDone && humanDone) {
-                    setTimeout(() => document.getElementById('loader').classList.add('hidden'), 400);
+                // Fit to ground and scale
+                const box = new THREE.Box3().setFromObject(bullModel);
+                const size = box.getSize(new THREE.Vector3());
+                bullModel.scale.setScalar(3.2 / size.y);
+                const box2 = new THREE.Box3().setFromObject(bullModel);
+                bullModel.position.y = -box2.min.y;
+                bullModel.position.x = 0;
+                bullModel.position.z = 0;
+                bullModel.rotation.y = Math.PI;
+
+                bullModel.traverse(c => { if (c.isMesh) c.castShadow = c.receiveShadow = true; });
+                scene.add(bullModel);
+                bullStartPos = bullModel.position.clone();
+
+                // Leg bones for kick dust
+                legBoneL = new THREE.Object3D(); legBoneR = new THREE.Object3D();
+                hoofBoneL = new THREE.Object3D(); hoofBoneR = new THREE.Object3D();
+                const b = new THREE.Box3().setFromObject(bullModel).getSize(new THREE.Vector3());
+                legBoneL.position.set(-b.x * .22, b.y * .35, b.z * .38);
+                legBoneR.position.set(b.x * .22, b.y * .35, b.z * .38);
+                hoofBoneL.position.set(0, -b.y * .35, 0);
+                hoofBoneR.position.set(0, -b.y * .35, 0);
+                legBoneL.add(hoofBoneL); legBoneR.add(hoofBoneR);
+                bullModel.add(legBoneL); bullModel.add(legBoneR);
+
+                if (gltf.animations?.length) {
+                    mixer = new THREE.AnimationMixer(bullModel);
+                    const row = document.getElementById('bull-anim-row');
+                    gltf.animations.forEach((clip, i) => {
+                        const action = mixer.clipAction(clip);
+                        glbAnims.set(clip.name, action);
+                        const btn = document.createElement('button');
+                        btn.className = 'btn';
+                        btn.innerHTML = `◈ ${clip.name || 'Anim ' + (i + 1)}`;
+                        btn.onclick = () => {
+                            playGLBAnim(clip.name);
+                            row.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                        };
+                        row.appendChild(btn);
+                        if (i === 0) { btn.classList.add('active'); playGLBAnim(clip.name); }
+                    });
                 }
-            }
 
-            loadModel('./bull.glb',
-                (gltf, pct) => { fill.style.width = (pct * 0.5) + '%'; txt.innerText = `Bull: ${Math.round(pct)}%`; },
-                (gltf) => {
-                    setupBull(gltf);
-                    bullDone = true;
-                    checkDone();
-                },
-                () => { txt.innerText = 'ERROR: bull.glb missing!'; txt.style.color = 'red'; }
-            );
-
-            loadModel('./human.glb',
-                (gltf, pct) => { fill.style.width = (50 + pct * 0.5) + '%'; txt.innerText = `Human: ${Math.round(pct)}%`; },
-                (gltf) => {
-                    setupHuman(gltf);
-                    humanDone = true;
-                    checkDone();
-                },
-                () => { txt.innerText = 'ERROR: human.glb missing!'; txt.style.color = 'red'; }
-            );
+                setTimeout(() => document.getElementById('loader').classList.add('hidden'), 500);
+            }, (xhr) => {
+                fill.style.width = (xhr.loaded / xhr.total * 100) + '%';
+            });
 
             window.addEventListener('resize', () => {
                 camera.aspect = innerWidth / innerHeight;
@@ -682,86 +473,27 @@
             animate();
         }
 
-        /* ═══════════════════════════════════════
-           LOADER HELPER
-        ═══════════════════════════════════════ */
-        function loadModel(path, onProgress, onLoad, onError) {
-            new GLTFLoader().load(path,
-                (gltf) => onLoad(gltf),
-                (xhr) => onProgress(gltf, xhr.total ? (xhr.loaded / xhr.total) * 100 : 50),
-                (err) => onError(err)
-            );
-        }
-
-        /* ═══════════════════════════════════════
-           LIGHTS
-        ═══════════════════════════════════════ */
         function setupLights() {
-            scene.add(new THREE.AmbientLight(0xffffff, 0.2));
-
-            const sun = new THREE.DirectionalLight(0xfff5e0, 2.5);
-            sun.position.set(8, 18, 10);
+            scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+            const sun = new THREE.DirectionalLight(0xfff5e0, 2);
+            sun.position.set(10, 20, 10);
             sun.castShadow = true;
-            sun.shadow.mapSize.set(2048, 2048);
-            sun.shadow.camera.left = sun.shadow.camera.bottom = -15;
-            sun.shadow.camera.right = sun.shadow.camera.top = 15;
             scene.add(sun);
-
-            // Bull side: warm orange
-            const rimBull = new THREE.SpotLight(0xff4d00, 60, 50, 0.45, 0.1);
-            rimBull.position.set(-12, 8, -5);
-            scene.add(rimBull);
-
-            // Human side: cool blue
-            const rimHuman = new THREE.SpotLight(0x00c8ff, 40, 50, 0.45, 0.1);
-            rimHuman.position.set(12, 8, -5);
-            scene.add(rimHuman);
-
-            // Arena torches
-            const torchColors = [0xff6600, 0xffaa00, 0x00aaff, 0xff3300];
-            for (let i = 0; i < 8; i++) {
-                const angle = (i / 8) * Math.PI * 2;
-                const pl = new THREE.PointLight(torchColors[i % 4], 4, 18);
-                pl.position.set(Math.cos(angle) * 16, 3, Math.sin(angle) * 16);
-                scene.add(pl);
-            }
+            const rim = new THREE.SpotLight(0xff4d00, 50, 40, 0.5, 0.1);
+            rim.position.set(-10, 10, -5);
+            scene.add(rim);
         }
 
-        /* ═══════════════════════════════════════
-           ENVIRONMENT
-        ═══════════════════════════════════════ */
         function setupEnvironment() {
-            const ground = new THREE.Mesh(
-                new THREE.PlaneGeometry(100, 100),
-                new THREE.MeshStandardMaterial({ color: 0x1a1008, roughness: 0.95 })
-            );
+            const ground = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.MeshStandardMaterial({ color: 0x1a1008 }));
             ground.rotation.x = -Math.PI / 2;
             ground.receiveShadow = true;
             scene.add(ground);
-
-            // Dual-color grid: bull side orange, human side blue
-            const gridBull = new THREE.GridHelper(50, 40, 0xff4d00, 0x1a1008);
-            gridBull.position.set(-12, 0.01, 0);
-            gridBull.material.opacity = 0.12; gridBull.material.transparent = true;
-            scene.add(gridBull);
-
-            const gridHuman = new THREE.GridHelper(50, 40, 0x00c8ff, 0x1a1008);
-            gridHuman.position.set(12, 0.01, 0);
-            gridHuman.material.opacity = 0.12; gridHuman.material.transparent = true;
-            scene.add(gridHuman);
-
-            // Center divider line (3D)
-            const divGeo = new THREE.PlaneGeometry(0.05, 30);
-            const divMat = new THREE.MeshBasicMaterial({ color: 0x444444, transparent: true, opacity: 0.4 });
-            const divMesh = new THREE.Mesh(divGeo, divMat);
-            divMesh.rotation.x = -Math.PI / 2;
-            divMesh.position.y = 0.02;
-            scene.add(divMesh);
+            const grid = new THREE.GridHelper(80, 60, 0xff4d00, 0x1a1008);
+            grid.material.opacity = 0.1; grid.material.transparent = true;
+            scene.add(grid);
         }
 
-        /* ═══════════════════════════════════════
-           DUST SYSTEM
-        ═══════════════════════════════════════ */
         function setupDust() {
             dustPositions = new Float32Array(DUST_COUNT * 3);
             dustVelocities = [];
@@ -769,29 +501,23 @@
             for (let i = 0; i < DUST_COUNT; i++) {
                 dustPositions[i * 3] = dustPositions[i * 3 + 2] = 9999;
                 dustVelocities.push(new THREE.Vector3());
-                dustLifetimes[i] = 0;
             }
-            dustGeo = new THREE.BufferGeometry();
-            dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
-            dustMesh = new THREE.Points(dustGeo,
-                new THREE.PointsMaterial({ color: 0xc8a060, size: 0.11, transparent: true, opacity: 0.7, depthWrite: false })
-            );
+            dustGeo = new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
+            dustMesh = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0xc8a060, size: 0.1, transparent: true, opacity: 0.6 }));
             scene.add(dustMesh);
         }
 
-        function spawnDust(origin, count = 50, color) {
+        function spawnDust(origin, count = 40) {
             let n = 0;
             for (let i = 0; i < DUST_COUNT && n < count; i++) {
                 if (dustLifetimes[i] <= 0) {
-                    dustPositions[i * 3] = origin.x + (Math.random() - .5) * 1.2;
-                    dustPositions[i * 3 + 1] = origin.y + Math.random() * .3;
-                    dustPositions[i * 3 + 2] = origin.z + (Math.random() - .5) * 1.2;
-                    dustVelocities[i].set((Math.random() - .5) * 2.5, Math.random() * 2 + .5, (Math.random() - .5) * 2.5);
-                    dustLifetimes[i] = .7 + Math.random() * .8;
+                    dustPositions[i * 3] = origin.x + (Math.random() - .5);
+                    dustPositions[i * 3 + 2] = origin.z + (Math.random() - .5);
+                    dustVelocities[i].set((Math.random() - .5) * 2, Math.random() * 2 + .5, (Math.random() - .5) * 2);
+                    dustLifetimes[i] = .8 + Math.random();
                     n++;
                 }
             }
-            dustGeo.attributes.position.needsUpdate = true;
         }
 
         function updateDust(dt) {
@@ -810,186 +536,38 @@
             if (changed) dustGeo.attributes.position.needsUpdate = true;
         }
 
-        /* ═══════════════════════════════════════
-           SETUP BULL
-        ═══════════════════════════════════════ */
-        function setupBull(gltf) {
-            bullModel = gltf.scene;
-
-            fitModel(bullModel, 3.2);
-            bullModel.position.set(-4, 0, 0);
-            bullModel.rotation.y = Math.PI * 0.15; // slight angle toward center
-
-            const box2 = new THREE.Box3().setFromObject(bullModel);
-            bullModel.position.y = -box2.min.y;
-
-            bullModel.traverse(c => {
-                if (c.isMesh) { c.castShadow = c.receiveShadow = true; }
-            });
-            scene.add(bullModel);
-            bullStartPos = bullModel.position.clone();
-
-            // Leg bone proxies
-            legBoneL = new THREE.Object3D(); legBoneR = new THREE.Object3D();
-            hoofBoneL = new THREE.Object3D(); hoofBoneR = new THREE.Object3D();
-            const bSize = new THREE.Box3().setFromObject(bullModel).getSize(new THREE.Vector3());
-            legBoneL.position.set(-bSize.x * .22, bSize.y * .35, bSize.z * .38);
-            legBoneR.position.set(bSize.x * .22, bSize.y * .35, bSize.z * .38);
-            hoofBoneL.position.set(0, -bSize.y * .35, 0);
-            hoofBoneR.position.set(0, -bSize.y * .35, 0);
-            legBoneL.add(hoofBoneL); legBoneR.add(hoofBoneR);
-            bullModel.add(legBoneL); bullModel.add(legBoneR);
-
-            // GLB animations
-            if (gltf.animations?.length) {
-                bullMixer = new THREE.AnimationMixer(bullModel);
-                const row = document.getElementById('bull-anim-row');
-                gltf.animations.forEach((clip, i) => {
-                    const action = bullMixer.clipAction(clip);
-                    bullAnims.set(clip.name, action);
-                    const btn = makeBtn(clip.name || `Anim ${i + 1}`, 'bull-btn', () => {
-                        playAnim(bullAnims, bullMixer, clip.name, 'bull');
-                        row.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                    });
-                    row.appendChild(btn);
-                    if (i === 0) { btn.classList.add('active'); playAnim(bullAnims, bullMixer, clip.name, 'bull'); }
-                });
-            }
-        }
-
-        /* ═══════════════════════════════════════
-           SETUP HUMAN
-        ═══════════════════════════════════════ */
-        function setupHuman(gltf) {
-            humanModel = gltf.scene;
-
-            fitModel(humanModel, 3.0);
-            humanModel.position.set(4, 0, 0);
-            humanModel.rotation.y = -Math.PI * 0.15; // slight angle toward center
-
-            const box2 = new THREE.Box3().setFromObject(humanModel);
-            humanModel.position.y = -box2.min.y;
-
-            humanModel.traverse(c => {
-                if (c.isMesh) { c.castShadow = c.receiveShadow = true; }
-            });
-            scene.add(humanModel);
-            humanStartPos = humanModel.position.clone();
-
-            // Foot bone proxies for trail FX
-            footBoneL = new THREE.Object3D(); footBoneR = new THREE.Object3D();
-            const hSize = new THREE.Box3().setFromObject(humanModel).getSize(new THREE.Vector3());
-            footBoneL.position.set(-hSize.x * .15, 0.1, 0);
-            footBoneR.position.set(hSize.x * .15, 0.1, 0);
-            humanModel.add(footBoneL); humanModel.add(footBoneR);
-
-            // GLB animations
-            if (gltf.animations?.length) {
-                humanMixer = new THREE.AnimationMixer(humanModel);
-                const row = document.getElementById('human-anim-row');
-                gltf.animations.forEach((clip, i) => {
-                    const action = humanMixer.clipAction(clip);
-                    humanAnims.set(clip.name, action);
-                    const btn = makeBtn(clip.name || `Anim ${i + 1}`, 'human-btn', () => {
-                        playAnim(humanAnims, humanMixer, clip.name, 'human');
-                        row.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                    });
-                    row.appendChild(btn);
-                    if (i === 0) { btn.classList.add('active'); playAnim(humanAnims, humanMixer, clip.name, 'human'); }
-                });
-            }
-        }
-
-        /* ═══════════════════════════════════════
-           HELPERS
-        ═══════════════════════════════════════ */
-        function fitModel(model, targetH) {
-            const box = new THREE.Box3().setFromObject(model);
-            const size = box.getSize(new THREE.Vector3());
-            model.scale.setScalar(targetH / size.y);
-        }
-
-        function makeBtn(label, cls, onClick) {
-            const btn = document.createElement('button');
-            btn.className = `btn ${cls}`;
-            btn.innerHTML = `◈ ${label}`;
-            btn.onclick = onClick;
-            return btn;
-        }
-
-        let activeBullAnim = null, activeHumanAnim = null;
-        function playAnim(map, mixer, name, who) {
-            const next = map.get(name);
-            if (!next || !mixer) return;
-            const active = who === 'bull' ? activeBullAnim : activeHumanAnim;
-            if (active === next) return;
-            if (active) active.fadeOut(0.3);
-            next.reset().fadeIn(0.3).play();
-            if (who === 'bull') activeBullAnim = next;
-            else activeHumanAnim = next;
-        }
-
-        /* ═══════════════════════════════════════
-           FX HELPERS
-        ═══════════════════════════════════════ */
         function flash(intensity, color = '#ff3e00') {
-            const el = document.getElementById('flash');
-            el.style.background = color;
-            el.style.opacity = intensity;
-            setTimeout(() => { el.style.opacity = 0; }, 90);
+            const f = document.getElementById('flash');
+            f.style.background = color; f.style.opacity = intensity;
+            setTimeout(() => f.style.opacity = 0, 80);
         }
 
-        function showLabel(id, duration = 700) {
-            const el = document.getElementById(id);
-            el.style.opacity = 1;
-            setTimeout(() => { el.style.opacity = 0; }, duration);
+        function showLabel(id) {
+            const l = document.getElementById(id);
+            l.style.opacity = 1; setTimeout(() => l.style.opacity = 0, 800);
         }
 
-        function spawnTrail(worldPos, color) {
-            const v = worldPos.clone().project(camera);
-            const x = (v.x * .5 + .5) * innerWidth;
-            const y = (-v.y * .5 + .5) * innerHeight;
-            for (let i = 0; i < 5; i++) {
-                const el = document.createElement('div');
-                el.className = 'trail-dot';
-                el.style.background = `radial-gradient(circle, ${color}, transparent)`;
-                el.style.left = (x + (Math.random() - .5) * 50) + 'px';
-                el.style.top = (y + (Math.random() - .5) * 50) + 'px';
-                document.getElementById('scene-container').appendChild(el);
-                setTimeout(() => el.remove(), 550);
-            }
+        function setStatus(t, a) {
+            document.getElementById('status-text').innerText = t;
+            const b = document.getElementById('status-badge');
+            a ? b.classList.add('active') : b.classList.remove('active');
         }
 
-        function setStatus(text, active) {
-            document.getElementById('status-text').innerText = text;
-            const badge = document.getElementById('status-badge');
-            active ? badge.classList.add('active') : badge.classList.remove('active');
+        let activeAnim = null;
+        function playGLBAnim(name) {
+            const next = glbAnims.get(name);
+            if (!next || activeAnim === next) return;
+            if (activeAnim) activeAnim.fadeOut(0.3);
+            next.reset().fadeIn(0.3).play();
+            activeAnim = next;
         }
 
-        function applyCameraShake() {
-            if (shakeIntensity <= 0) return;
-            camera.position.x += (Math.random() - .5) * shakeIntensity * .14;
-            camera.position.y += (Math.random() - .5) * shakeIntensity * .07;
-            shakeIntensity *= 0.87;
-            if (shakeIntensity < 0.004) shakeIntensity = 0;
-        }
-
-        const easeIn = t => t * t * t;
-        const easeOut = t => 1 - Math.pow(1 - t, 3);
-        const easeInOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-        /* ═══════════════════════════════════════
-           ⚡ BULL — CHARGE
-        ═══════════════════════════════════════ */
         window.triggerCharge = function () {
             if (chargeState !== 'idle' || kickState !== 'idle' || !bullModel) return;
-            document.getElementById('charge-btn').disabled = true;
-            setStatus('BULL CHARGING!', true);
             chargeState = 'windup'; chargeT = 0;
             bullStartPos = bullModel.position.clone();
-            bullTargetPos = bullModel.position.clone().add(new THREE.Vector3(8, 0, -2));
+            bullTargetPos = bullModel.position.clone().add(new THREE.Vector3(0, 0, -18));
+            setStatus('WINDING UP...', true);
             origCamPos = camera.position.clone();
             origCamTarget = controls.target.clone();
         };
@@ -997,246 +575,69 @@
         function updateCharge(dt) {
             if (!bullModel || chargeState === 'idle') return;
             chargeT += dt;
-
             if (chargeState === 'windup') {
-                const t = Math.min(chargeT / 1.1, 1);
-                bullModel.rotation.x = THREE.MathUtils.lerp(0, .32, easeInOut(t));
-                if (Math.random() < .15) { const p = bullModel.position.clone(); p.y = .05; spawnDust(p, 8); }
-                if (chargeT >= 1.1) { chargeState = 'sprint'; chargeT = 0; flash(.55); showLabel('charge-label'); shakeIntensity = .22; setStatus('CHARGING!', true); }
-            }
-            else if (chargeState === 'sprint') {
-                const t = Math.min(chargeT / 1.3, 1);
-                bullModel.position.lerpVectors(bullStartPos, bullTargetPos, easeIn(t));
-                bullModel.rotation.x = THREE.MathUtils.lerp(.32, -.08, easeIn(t));
-                bullModel.position.y = bullStartPos.y + Math.abs(Math.sin(chargeT * 14)) * .1;
-                if (Math.random() < .6) { const p = bullModel.position.clone(); p.y = .05; spawnDust(p, 10); }
-                shakeIntensity = .25 - easeIn(t) * .15;
-                if (chargeT >= 1.3) { chargeState = 'brake'; chargeT = 0; flash(1.0); shakeIntensity = .5; spawnDust(bullModel.position, 100); setStatus('IMPACT!', true); }
-            }
-            else if (chargeState === 'brake') {
-                const t = Math.min(chargeT / .7, 1);
-                bullModel.rotation.x = THREE.MathUtils.lerp(-.08, 0, easeOut(t));
-                shakeIntensity = THREE.MathUtils.lerp(.5, 0, t);
-                if (chargeT >= .7) { chargeState = 'reset'; chargeT = 0; setStatus('RESETTING...', false); }
-            }
-            else if (chargeState === 'reset') {
-                bullModel.position.lerp(bullStartPos, .06);
-                bullModel.rotation.x = THREE.MathUtils.lerp(bullModel.rotation.x, 0, .1);
+                bullModel.rotation.x = THREE.MathUtils.lerp(0, .3, chargeT / 1.2);
+                if (chargeT >= 1.2) { chargeState = 'sprint'; chargeT = 0; flash(.6); showLabel('charge-label'); shakeIntensity = .2; setStatus('CHARGING!', true); }
+            } else if (chargeState === 'sprint') {
+                const ease = easeIn(chargeT / 1.4);
+                bullModel.position.lerpVectors(bullStartPos, bullTargetPos, ease);
+                bullModel.position.y = bullStartPos.y + Math.abs(Math.sin(chargeT * 15)) * .1;
+                if (Math.random() < .6) spawnDust(bullModel.position, 10);
+                if (chargeT >= 1.4) { chargeState = 'brake'; chargeT = 0; flash(1); shakeIntensity = .5; spawnDust(bullModel.position, 100); setStatus('IMPACT!', true); }
+            } else if (chargeState === 'brake') {
+                bullModel.rotation.x = THREE.MathUtils.lerp(.3, 0, chargeT / .8);
+                if (chargeT >= .8) { chargeState = 'reset'; chargeT = 0; setStatus('RESETTING...', false); }
+            } else if (chargeState === 'reset') {
+                bullModel.position.lerp(bullStartPos, .05);
                 camera.position.lerp(origCamPos, .05);
-                controls.target.lerp(origCamTarget, .05);
-                if (chargeT >= 1.8 && bullModel.position.distanceTo(bullStartPos) < .15) {
-                    bullModel.position.copy(bullStartPos);
-                    bullModel.rotation.x = 0;
-                    chargeState = 'idle';
-                    setStatus('READY', false);
-                    document.getElementById('charge-btn').disabled = false;
+                if (chargeT >= 2 && bullModel.position.distanceTo(bullStartPos) < .1) {
+                    bullModel.position.copy(bullStartPos); bullModel.rotation.x = 0;
+                    chargeState = 'idle'; setStatus('READY', false);
                 }
             }
         }
 
-        /* ═══════════════════════════════════════
-           🦵 BULL — BACK KICK
-        ═══════════════════════════════════════ */
         window.triggerKick = function () {
             if (kickState !== 'idle' || chargeState !== 'idle' || !bullModel) return;
-            document.getElementById('kick-btn').disabled = true;
-            setStatus('KICK WINDUP!', true);
-            kickState = 'lean'; kickT = 0; kickStartRotX = bullModel.rotation.x;
-            if (legBoneL) { legBoneL.rotation.x = 0; legBoneR.rotation.x = 0; }
-            if (hoofBoneL) { hoofBoneL.rotation.x = 0; hoofBoneR.rotation.x = 0; }
-        };
+            kickState = 'lean'; kickT = 0; setStatus('KICK WINDUP...', true);
+        }
 
         function updateKick(dt) {
             if (!bullModel || kickState === 'idle') return;
             kickT += dt;
-
             if (kickState === 'lean') {
-                const t = Math.min(kickT / .5, 1);
-                bullModel.rotation.x = THREE.MathUtils.lerp(kickStartRotX, -.28, easeInOut(t));
-                if (legBoneL) { legBoneL.rotation.x = THREE.MathUtils.lerp(0, -.5, easeInOut(t)); legBoneR.rotation.x = legBoneL.rotation.x; }
-                if (Math.random() < .1) { const p = bullModel.position.clone(); p.z -= .8; p.y = .05; spawnDust(p, 5); }
-                if (kickT >= .5) { kickState = 'lift'; kickT = 0; setStatus('LIFTING LEGS!', true); }
-            }
-            else if (kickState === 'lift') {
-                const t = Math.min(kickT / .42, 1);
-                if (legBoneL) {
-                    legBoneL.rotation.x = THREE.MathUtils.lerp(-.5, -1.4, easeOut(t));
-                    legBoneR.rotation.x = legBoneL.rotation.x;
-                    if (hoofBoneL) { hoofBoneL.rotation.x = THREE.MathUtils.lerp(0, 1.1, easeOut(t)); hoofBoneR.rotation.x = hoofBoneL.rotation.x; }
-                }
-                if (kickT >= .42) { kickState = 'snap'; kickT = 0; setStatus('KICKING!', true); }
-            }
-            else if (kickState === 'snap') {
-                const t = Math.min(kickT / .2, 1);
-                if (legBoneL) {
-                    legBoneL.rotation.x = THREE.MathUtils.lerp(-1.4, .9, easeIn(t));
-                    legBoneR.rotation.x = legBoneL.rotation.x;
-                    if (hoofBoneL) { hoofBoneL.rotation.x = THREE.MathUtils.lerp(1.1, -.3, easeIn(t)); hoofBoneR.rotation.x = hoofBoneL.rotation.x; }
-                }
-                bullModel.rotation.x = THREE.MathUtils.lerp(-.28, .18, easeIn(t));
+                bullModel.rotation.x = THREE.MathUtils.lerp(0, -.3, kickT / .5);
+                if (kickT >= .5) { kickState = 'lift'; kickT = 0; }
+            } else if (kickState === 'lift') {
+                if (legBoneL) { legBoneL.rotation.x = THREE.MathUtils.lerp(0, -1.4, kickT / .4); legBoneR.rotation.x = legBoneL.rotation.x; }
+                if (kickT >= .4) { kickState = 'snap'; kickT = 0; }
+            } else if (kickState === 'snap') {
+                if (legBoneL) { legBoneL.rotation.x = THREE.MathUtils.lerp(-1.4, .9, kickT / .2); legBoneR.rotation.x = legBoneL.rotation.x; }
                 if (kickT >= .1 && kickT < .12) {
-                    flash(.7, '#7b00ff'); showLabel('kick-label'); shakeIntensity = .55;
-                    if (hoofBoneL) {
-                        const wL = new THREE.Vector3(), wR = new THREE.Vector3();
-                        hoofBoneL.getWorldPosition(wL); wL.y = .05;
-                        hoofBoneR.getWorldPosition(wR); wR.y = .05;
-                        spawnDust(wL, 80); spawnDust(wR, 80);
-                        spawnTrail(wL, '#c800ff'); spawnTrail(wR, '#c800ff');
-                    }
+                    flash(.7, '#7b00ff'); showLabel('kick-label'); shakeIntensity = .6;
+                    const wL = new THREE.Vector3(); hoofBoneL.getWorldPosition(wL); spawnDust(wL, 80);
                 }
-                if (Math.random() < .6 && hoofBoneL) { const w = new THREE.Vector3(); hoofBoneL.getWorldPosition(w); w.y = .05; spawnDust(w, 8); }
-                if (kickT >= .2) { kickState = 'recoil'; kickT = 0; setStatus('RECOIL!', true); }
-            }
-            else if (kickState === 'recoil') {
-                const t = Math.min(kickT / .5, 1);
-                if (legBoneL) { legBoneL.rotation.x = THREE.MathUtils.lerp(.9, 0, easeOut(t)); legBoneR.rotation.x = legBoneL.rotation.x; }
-                if (hoofBoneL) { hoofBoneL.rotation.x = THREE.MathUtils.lerp(-.3, 0, easeOut(t)); hoofBoneR.rotation.x = hoofBoneL.rotation.x; }
-                bullModel.rotation.x = THREE.MathUtils.lerp(.18, kickStartRotX, easeOut(t));
-                shakeIntensity = THREE.MathUtils.lerp(.55, 0, t);
-                if (kickT >= .5) { kickState = 'settle'; kickT = 0; setStatus('SETTLING...', false); }
-            }
-            else if (kickState === 'settle') {
-                bullModel.rotation.x = THREE.MathUtils.lerp(bullModel.rotation.x, kickStartRotX, .12);
-                if (kickT >= .6) {
-                    bullModel.rotation.x = kickStartRotX;
-                    if (legBoneL) { legBoneL.rotation.x = 0; legBoneR.rotation.x = 0; }
-                    if (hoofBoneL) { hoofBoneL.rotation.x = 0; hoofBoneR.rotation.x = 0; }
-                    kickState = 'idle'; setStatus('READY', false);
-                    document.getElementById('kick-btn').disabled = false;
-                }
+                if (kickT >= .2) { kickState = 'recoil'; kickT = 0; }
+            } else if (kickState === 'recoil') {
+                if (legBoneL) { legBoneL.rotation.x = THREE.MathUtils.lerp(.9, 0, kickT / .5); legBoneR.rotation.x = legBoneL.rotation.x; }
+                bullModel.rotation.x = THREE.MathUtils.lerp(-.3, 0, kickT / .5);
+                if (kickT >= .5) { kickState = 'idle'; setStatus('READY', false); }
             }
         }
 
-        /* ═══════════════════════════════════════
-           🏃 HUMAN — RUN
-        ═══════════════════════════════════════ */
-        window.triggerRun = function () {
-            if (runState !== 'idle' || dodgeState !== 'idle' || !humanModel) return;
-            document.getElementById('run-btn').disabled = true;
-            setStatus('HUMAN RUNNING!', true);
-            runState = 'accel'; runT = 0;
-            humanStartPos = humanModel.position.clone();
-            humanTargetPos = humanModel.position.clone().add(new THREE.Vector3(-8, 0, -2));
-        };
-
-        function updateRun(dt) {
-            if (!humanModel || runState === 'idle') return;
-            runT += dt;
-
-            if (runState === 'accel') {
-                const t = Math.min(runT / .4, 1);
-                humanModel.rotation.y = THREE.MathUtils.lerp(-Math.PI * .15, -Math.PI * .5, easeInOut(t));
-                if (runT >= .4) { runState = 'sprint'; runT = 0; showLabel('run-label'); flash(.4, '#00c8ff'); setStatus('SPRINTING!', true); }
-            }
-            else if (runState === 'sprint') {
-                const t = Math.min(runT / 1.2, 1);
-                humanModel.position.lerpVectors(humanStartPos, humanTargetPos, easeIn(t));
-                // Running bob
-                humanModel.position.y = humanStartPos.y + Math.abs(Math.sin(runT * 12)) * .12;
-                // Foot dust
-                if (Math.random() < .5) {
-                    const p = humanModel.position.clone(); p.y = .05;
-                    spawnDust(p, 6);
-                    if (footBoneL) { const w = new THREE.Vector3(); footBoneL.getWorldPosition(w); w.y = .05; spawnTrail(w, '#00c8ff'); }
-                }
-                if (runT >= 1.2) { runState = 'stop'; runT = 0; setStatus('STOPPING!', false); }
-            }
-            else if (runState === 'stop') {
-                const t = Math.min(runT / .5, 1);
-                humanModel.rotation.y = THREE.MathUtils.lerp(-Math.PI * .5, -Math.PI * .15, easeOut(t));
-                if (runT >= .5) {
-                    humanModel.position.copy(humanTargetPos);
-                    humanModel.position.y = humanStartPos.y;
-                    // Walk back
-                    humanStartPos = humanModel.position.clone();
-                    humanTargetPos = new THREE.Vector3(4, humanModel.position.y, 0);
-                    runState = 'return'; runT = 0; setStatus('RETURNING...', false);
-                }
-            }
-            else if (runState === 'return') {
-                humanModel.position.lerp(humanTargetPos, .05);
-                humanModel.rotation.y = THREE.MathUtils.lerp(humanModel.rotation.y, -Math.PI * .15, .05);
-                if (runT >= 1.5 && humanModel.position.distanceTo(humanTargetPos) < .2) {
-                    humanModel.position.copy(humanTargetPos);
-                    humanModel.rotation.y = -Math.PI * .15;
-                    runState = 'idle'; setStatus('READY', false);
-                    document.getElementById('run-btn').disabled = false;
-                }
-            }
-        }
-
-        /* ═══════════════════════════════════════
-           💨 HUMAN — DODGE
-        ═══════════════════════════════════════ */
-        window.triggerDodge = function () {
-            if (dodgeState !== 'idle' || runState !== 'idle' || !humanModel) return;
-            document.getElementById('dodge-btn').disabled = true;
-            setStatus('DODGING!', true);
-            dodgeState = 'crouch'; dodgeT = 0;
-            dodgeStartPos = humanModel.position.clone();
-        };
-
-        function updateDodge(dt) {
-            if (!humanModel || dodgeState === 'idle') return;
-            dodgeT += dt;
-
-            if (dodgeState === 'crouch') {
-                const t = Math.min(dodgeT / .25, 1);
-                // Crouch: scale Y down
-                humanModel.scale.y = THREE.MathUtils.lerp(humanModel.scale.y, humanModel.scale.y * .7, easeInOut(t));
-                humanModel.rotation.z = THREE.MathUtils.lerp(0, .3, easeInOut(t));
-                if (dodgeT >= .25) { dodgeState = 'leap'; dodgeT = 0; showLabel('dodge-label'); flash(.5, '#00c853'); setStatus('LEAPING!', true); }
-            }
-            else if (dodgeState === 'leap') {
-                const t = Math.min(dodgeT / .45, 1);
-                // Leap sideways (toward camera-left)
-                humanModel.position.x = dodgeStartPos.x + easeOut(t) * 3;
-                humanModel.position.y = dodgeStartPos.y + Math.sin(t * Math.PI) * 1.8; // arc
-                humanModel.rotation.z = THREE.MathUtils.lerp(.3, -.2, easeInOut(t));
-                // Restore scale
-                humanModel.scale.y = THREE.MathUtils.lerp(humanModel.scale.y, humanModel.scale.y / .7, .05);
-                if (Math.random() < .4) { const p = humanModel.position.clone(); p.y = .05; spawnDust(p, 8); }
-                shakeIntensity = .2;
-                if (dodgeT >= .45) { dodgeState = 'land'; dodgeT = 0; setStatus('LANDING!', true); flash(.35, '#00c853'); spawnDust(humanModel.position, 50); }
-            }
-            else if (dodgeState === 'land') {
-                const t = Math.min(dodgeT / .3, 1);
-                humanModel.position.y = THREE.MathUtils.lerp(humanModel.position.y, dodgeStartPos.y, easeOut(t));
-                humanModel.rotation.z = THREE.MathUtils.lerp(humanModel.rotation.z, 0, easeOut(t));
-                shakeIntensity = THREE.MathUtils.lerp(.2, 0, t);
-                if (dodgeT >= .3) { dodgeState = 'rise'; dodgeT = 0; setStatus('RECOVERING...', false); }
-            }
-            else if (dodgeState === 'rise') {
-                humanModel.position.lerp(dodgeStartPos, .05);
-                humanModel.rotation.z = THREE.MathUtils.lerp(humanModel.rotation.z, 0, .1);
-                if (dodgeT >= .8) {
-                    humanModel.position.copy(dodgeStartPos);
-                    humanModel.rotation.z = 0;
-                    dodgeState = 'idle'; setStatus('READY', false);
-                    document.getElementById('dodge-btn').disabled = false;
-                }
-            }
-        }
-
-        /* ═══════════════════════════════════════
-           MAIN LOOP
-        ═══════════════════════════════════════ */
+        const easeIn = t => t * t * t;
         function animate() {
             requestAnimationFrame(animate);
             const dt = Math.min(clock.getDelta(), .05);
-            const t = clock.elapsedTime;
-
-            if (bullMixer) bullMixer.update(dt);
-            if (humanMixer) humanMixer.update(dt);
+            if (mixer) mixer.update(dt);
             controls.update();
-
             updateDust(dt);
             updateCharge(dt);
             updateKick(dt);
-            updateRun(dt);
-            updateDodge(dt);
-            applyCameraShake();
-
+            if (shakeIntensity > 0) {
+                camera.position.x += (Math.random() - .5) * shakeIntensity;
+                shakeIntensity *= .9;
+            }
             renderer.render(scene, camera);
         }
     </script>
