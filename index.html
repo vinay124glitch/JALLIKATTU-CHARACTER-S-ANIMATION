@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bull Animation Showcase</title>
+    <title>Mersal Bull | Premium 3D Animation</title>
     <style>
         :root {
-            --accent: #ffb400;
             --primary: #ff3e00;
-            --bg: #050505;
-            --panel: rgba(15, 15, 15, 0.9);
+            --secondary: #ffb400;
+            --bg: #0a0a0a;
+            --glass: rgba(20, 20, 20, 0.85);
         }
 
         *,
@@ -28,7 +28,7 @@
             overflow: hidden;
             background: var(--bg);
             color: #fff;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Outfit', -apple-system, sans-serif;
         }
 
         #scene-container {
@@ -37,15 +37,16 @@
             position: relative;
         }
 
-        /* ── CINEMATIC OVERLAYS ── */
+        /* ── VIGNETTE ── */
         .vignette {
             position: absolute;
             inset: 0;
             pointer-events: none;
             z-index: 5;
-            background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.9) 150%);
+            background: radial-gradient(circle, transparent 45%, rgba(0, 0, 0, .85) 160%);
         }
 
+        /* ── FLASH OVERLAY ── */
         #flash {
             position: absolute;
             inset: 0;
@@ -56,132 +57,273 @@
             transition: opacity 0.05s;
         }
 
+        /* ── SCREEN SHAKE ── */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            10% {
+                transform: translate(-6px, 4px) rotate(-0.5deg);
+            }
+
+            20% {
+                transform: translate(6px, -4px) rotate(0.5deg);
+            }
+
+            30% {
+                transform: translate(-5px, 5px) rotate(-0.3deg);
+            }
+
+            40% {
+                transform: translate(5px, -3px) rotate(0.3deg);
+            }
+
+            50% {
+                transform: translate(-4px, 4px) rotate(-0.2deg);
+            }
+
+            60% {
+                transform: translate(4px, -4px) rotate(0.2deg);
+            }
+
+            70% {
+                transform: translate(-3px, 3px) rotate(-0.1deg);
+            }
+
+            80% {
+                transform: translate(3px, -2px) rotate(0.1deg);
+            }
+
+            90% {
+                transform: translate(-2px, 2px) rotate(0deg);
+            }
+        }
+
+        .shaking {
+            animation: shake 0.6s ease-in-out;
+        }
+
         /* ── HUD ── */
         .hud {
             position: absolute;
             inset: 0;
             z-index: 100;
             pointer-events: none;
-            padding: 2.5rem;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-left: 5px solid var(--primary);
-            padding-left: 1.5rem;
+        .title-group {
+            border-left: 4px solid var(--primary);
+            padding-left: 1.2rem;
         }
 
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.4rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            line-height: 1;
-            background: linear-gradient(to bottom, #fff, #aaa);
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #fff, var(--secondary));
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            font-size: .85rem;
-            color: var(--accent);
+            font-size: .8rem;
+            color: var(--secondary);
             font-weight: 600;
-            letter-spacing: 6px;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            margin-top: .5rem;
+            margin-top: .2rem;
         }
 
-        /* ── ANIMATION CONTROL CENTER ── */
-        .control-center {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            pointer-events: all;
-            max-width: 500px;
-        }
-
-        .anim-group {
-            background: var(--panel);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 1.5rem;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .group-label {
-            font-size: .7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 1rem;
-            display: flex;
+        /* ── STATUS BADGE ── */
+        #status-badge {
+            display: inline-flex;
             align-items: center;
-            gap: .8rem;
+            gap: .5rem;
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, .1);
+            backdrop-filter: blur(12px);
+            border-radius: 30px;
+            padding: .5rem 1.2rem;
+            font-size: .8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all .3s ease;
         }
 
-        .group-label::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
+        #status-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4caf50;
+            box-shadow: 0 0 8px #4caf50;
+            animation: pulse-dot 1.5s ease-in-out infinite;
         }
 
-        .btn-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .3;
+            }
+        }
+
+        #status-badge.charging {
+            background: rgba(255, 62, 0, .3);
+            border-color: var(--primary);
+        }
+
+        #status-badge.charging .dot {
+            background: var(--primary);
+            box-shadow: 0 0 12px var(--primary);
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 1rem;
+        }
+
+        /* ── BUTTON PANEL ── */
+        .btn-panel {
+            pointer-events: all;
+            display: flex;
             gap: .8rem;
+            flex-wrap: wrap;
         }
 
         .btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, .15);
             color: #fff;
-            padding: .8rem 1.2rem;
+            padding: .75rem 1.4rem;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
             font-size: .8rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all .2s cubic-bezier(.4, 0, .2, 1);
-            text-align: left;
-            position: relative;
-            overflow: hidden;
+            transition: all .25s cubic-bezier(.4, 0, .2, 1);
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            backdrop-filter: blur(10px);
         }
 
         .btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(255, 62, 0, .3);
+            background: var(--primary);
+            border-color: var(--primary);
         }
 
         .btn.active {
             background: var(--primary);
             border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(255, 62, 0, 0.4);
+            box-shadow: 0 0 20px rgba(255, 62, 0, .5);
         }
 
-        /* Cinematic Action Buttons */
-        .action-btn {
-            background: linear-gradient(135deg, var(--primary), #cc2200);
-            border: none;
+        /* CHARGE BUTTON special */
+        #charge-btn {
+            background: linear-gradient(135deg, #ff3e00, #ff8c00);
+            border-color: #ff8c00;
+            font-size: .9rem;
+            padding: .85rem 1.8rem;
+            box-shadow: 0 0 20px rgba(255, 62, 0, .4);
+            animation: charge-pulse 2s ease-in-out infinite;
         }
 
-        .action-btn::before {
-            content: "⚡";
-            margin-right: 8px;
+        @keyframes charge-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(255, 62, 0, .4);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(255, 62, 0, .8), 0 0 60px rgba(255, 140, 0, .3);
+            }
         }
 
-        /* ── LOADING SCREEN ── */
-        .loader {
+        #charge-btn:hover {
+            transform: scale(1.05) translateY(-3px);
+        }
+
+        #charge-btn:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            transform: none;
+            animation: none;
+        }
+
+        /* KICK BUTTON special */
+        #kick-btn {
+            background: linear-gradient(135deg, #7b00ff, #c800ff);
+            border-color: #c800ff;
+            font-size: .9rem;
+            padding: .85rem 1.8rem;
+            box-shadow: 0 0 20px rgba(123, 0, 255, .4);
+            animation: kick-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes kick-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(123, 0, 255, .4);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(123, 0, 255, .8), 0 0 60px rgba(200, 0, 255, .3);
+            }
+        }
+
+        #kick-btn:hover {
+            transform: scale(1.05) translateY(-3px);
+        }
+
+        #kick-btn:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            transform: none;
+            animation: none;
+        }
+
+        /* ── CONTROLS HINT ── */
+        .controls-hint {
+            background: var(--glass);
+            padding: .9rem 1.3rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, .08);
+            font-size: .75rem;
+            color: #777;
+            line-height: 1.7;
+        }
+
+        .controls-hint strong {
+            color: var(--secondary);
+            display: block;
+            margin-bottom: .2rem;
+        }
+
+        /* ── LOADER ── */
+        .loader-overlay {
             position: absolute;
             inset: 0;
             background: var(--bg);
@@ -190,17 +332,17 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity .6s ease;
+            transition: opacity .8s ease;
         }
 
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 3px solid rgba(255, 255, 255, 0.05);
-            border-top-color: var(--primary);
+        .loader-spinner {
+            width: 56px;
+            height: 56px;
+            border: 4px solid rgba(255, 62, 0, .1);
+            border-top: 4px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         @keyframes spin {
@@ -209,46 +351,19 @@
             }
         }
 
-        .prog-text {
-            color: var(--accent);
-            font-weight: 700;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-size: .8rem;
+        .progress-bar {
+            width: 200px;
+            height: 2px;
+            background: rgba(255, 255, 255, .1);
+            border-radius: 2px;
+            overflow: hidden;
         }
 
-        /* ── STATUS BADGE ── */
-        .status-badge {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: .6rem 1.2rem;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: .8rem;
-            font-size: .75rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #4caf50;
-            box-shadow: 0 0 10px #4caf50;
-        }
-
-        .active-status .dot {
+        .progress-fill {
+            width: 0%;
+            height: 100%;
             background: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
-            animation: blink .8s infinite;
-        }
-
-        @keyframes blink {
-            50% {
-                opacity: 0.3;
-            }
+            transition: width .3s ease;
         }
 
         .hidden {
@@ -256,290 +371,682 @@
             pointer-events: none !important;
         }
 
-        /* Cinematic Labels */
-        .label-fx {
+        /* ── CHARGE LABEL ── */
+        #charge-label {
             position: absolute;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 6rem;
-            font-weight: 900;
-            color: var(--primary);
+            font-size: 5rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 12px;
+            color: var(--primary);
+            letter-spacing: 8px;
+            text-shadow: 0 0 40px rgba(255, 62, 0, .8);
             opacity: 0;
-            text-shadow: 0 0 40px rgba(255, 62, 0, 0.8);
-            z-index: 300;
             pointer-events: none;
-            transition: all 0.2s cubic-bezier(.17, .67, .83, .67);
+            z-index: 300;
+            transition: opacity .2s;
+        }
+
+        /* ── KICK LABEL ── */
+        #kick-label {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #c800ff;
+            letter-spacing: 8px;
+            text-shadow: 0 0 40px rgba(200, 0, 255, .9), 0 0 80px rgba(123, 0, 255, .5);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 300;
+            transition: opacity .15s;
+        }
+
+        /* ── LEG KICK VISUAL (CSS hoof trails) ── */
+        .hoof-trail {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #c800ff, transparent);
+            pointer-events: none;
+            z-index: 250;
+            animation: hoof-fade .5s ease-out forwards;
+        }
+
+        @keyframes hoof-fade {
+            from {
+                opacity: .9;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: scale(3);
+            }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div id="scene-container">
         <div class="vignette"></div>
         <div id="flash"></div>
-        <div id="fx-label" class="label-fx">CHARGE</div>
+        <div id="charge-label">⚡ CHARGE!</div>
+        <div id="kick-label">💥 KICK!</div>
 
         <div class="hud">
-            <div class="header">
-                <div>
-                    <h1>Bull Animation</h1>
-                    <div class="subtitle">High-Fidelity 3D Showcase</div>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div class="title-group">
+                    <h1>Mersal Bull</h1>
+                    <div class="subtitle">Jallikattu Heritage Simulator</div>
                 </div>
-                <div class="status-badge" id="status-container">
-                    <div class="dot"></div>
-                    <span id="status-text">STANDING BY</span>
-                </div>
+                <div id="status-badge"><span class="dot"></span><span id="status-text">IDLE</span></div>
             </div>
 
-            <div class="control-center">
-                <!-- CINEMATIC ACTIONS -->
-                <div class="anim-group">
-                    <div class="group-label">Cinematic Moves</div>
-                    <div class="btn-grid">
-                        <button class="btn action-btn" onclick="runAction('charge')">Charge Attack</button>
-                        <button class="btn action-btn" onclick="runAction('kick')">Back Kick</button>
-                    </div>
+            <div class="footer">
+                <div class="btn-panel" id="anim-panel">
+                    <button class="btn" id="charge-btn" onclick="triggerCharge()">
+                        🐂 CHARGE!
+                    </button>
+                    <button class="btn" id="kick-btn" onclick="triggerKick()">
+                        🦵 BACK KICK!
+                    </button>
+                    <!-- GLB animation buttons injected here -->
                 </div>
-
-                <!-- GLB BUILT-IN ANIMATIONS -->
-                <div class="anim-group">
-                    <div class="group-label">Built-in Clips</div>
-                    <div class="btn-grid" id="glb-btn-grid">
-                        <!-- Clips injected here -->
-                    </div>
+                <div class="controls-hint">
+                    <strong>VIEWER CONTROLS</strong>
+                    Rotate: Left Click + Drag<br>
+                    Zoom: Scroll Wheel<br>
+                    Pan: Right Click + Drag
                 </div>
             </div>
         </div>
 
-        <div class="loader" id="loader">
-            <div class="spinner"></div>
-            <div class="prog-text" id="loader-status">Initializing...</div>
+        <div class="loader-overlay" id="loader">
+            <div class="loader-spinner"></div>
+            <div style="color:#666;font-size:.8rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.5rem;">
+                Preparing the Arena</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div id="loader-text" style="margin-top:1rem;color:var(--secondary);font-weight:600;">Loading Bull...</div>
         </div>
     </div>
 
     <script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
-        }
+{
+    "imports": {
+        "three": "https://unpkg.com/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.161.0/examples/jsm/"
     }
-    </script>
+}
+</script>
     <script type="module">
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+        /* ═══════════════════════════════════════════════
+           GLOBALS
+        ═══════════════════════════════════════════════ */
         let scene, camera, renderer, controls, clock;
-        let model, mixer, activeAction;
-        const actions = {};
+        let mixer, bullModel;
+        let dustSystem, groundRumble;
+        const glbAnims = new Map();
 
-        // States
-        let isPerforming = false;
-        let shake = 0;
+        // Charge state machine
+        let chargeState = 'idle'; // idle | windup | sprint | brake | reset
+        let chargeT = 0;
+        let chargeDir = new THREE.Vector3(0, 0, -1);
+        let bullStartPos, bullTargetPos;
+        let originalCamPos, originalCamTarget;
+        let shakeIntensity = 0;
 
+        // ── KICK state machine ──
+        let kickState = 'idle'; // idle | lean | lift | snap | recoil | settle
+        let kickT = 0;
+        // Leg bone proxies (invisible objects we animate, then read world pos for dust/FX)
+        let legBoneL, legBoneR;   // back-left / back-right upper
+        let hoofBoneL, hoofBoneR; // hoof tips
+        let kickStartRotX = 0;    // bull body rotation at kick start
+
+        // Dust particles
+        let dustPositions, dustVelocities, dustLifetimes, dustGeo, dustMesh;
+        const DUST_COUNT = 300;
+
+        /* ═══════════════════════════════════════════════
+           INIT
+        ═══════════════════════════════════════════════ */
         init();
 
-        function init() {
+        async function init() {
             clock = new THREE.Clock();
+
+            // Scene
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x050505);
-            scene.fog = new THREE.FogExp2(0x050505, 0.05);
+            scene.background = new THREE.Color(0x0a0a0a);
+            scene.fog = new THREE.FogExp2(0x0a0a0a, 0.04);
 
-            camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 3, 12);
+            // Camera
+            camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 0.1, 500);
+            camera.position.set(0, 2.5, 9);
+            originalCamPos = camera.position.clone();
+            originalCamTarget = new THREE.Vector3(0, 1.5, 0);
 
+            // Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setSize(innerWidth, innerHeight);
+            renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.1;
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             document.getElementById('scene-container').appendChild(renderer.domElement);
 
+            // Orbit controls
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
-            controls.target.set(0, 1.5, 0);
+            controls.dampingFactor = 0.06;
+            controls.target.copy(originalCamTarget);
+            controls.maxDistance = 25;
+            controls.minDistance = 2;
 
-            // Lights
-            const ambient = new THREE.AmbientLight(0xffffff, 0.2);
-            scene.add(ambient);
+            setupLights();
+            setupEnvironment();
+            setupDust();
+            loadBull();
 
-            const spot1 = new THREE.SpotLight(0xffffff, 80);
-            spot1.position.set(10, 15, 10);
-            spot1.castShadow = true;
-            scene.add(spot1);
+            window.addEventListener('resize', () => {
+                camera.aspect = innerWidth / innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(innerWidth, innerHeight);
+            });
 
-            const rim = new THREE.SpotLight(0xff3e00, 40);
-            rim.position.set(-10, 5, -5);
-            scene.add(rim);
+            animate();
+        }
 
+        /* ═══════════════════════════════════════════════
+           LIGHTS
+        ═══════════════════════════════════════════════ */
+        function setupLights() {
+            scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+
+            const sun = new THREE.DirectionalLight(0xfff5e0, 2.5);
+            sun.position.set(8, 18, 10);
+            sun.castShadow = true;
+            sun.shadow.mapSize.set(2048, 2048);
+            sun.shadow.camera.left = sun.shadow.camera.bottom = -12;
+            sun.shadow.camera.right = sun.shadow.camera.top = 12;
+            scene.add(sun);
+
+            const rimL = new THREE.SpotLight(0xff4d00, 60, 50, 0.45, 0.1);
+            rimL.position.set(-10, 8, -5);
+            scene.add(rimL);
+
+            const rimR = new THREE.SpotLight(0xffb400, 30, 50, 0.45, 0.1);
+            rimR.position.set(10, 8, -5);
+            scene.add(rimR);
+        }
+
+        /* ═══════════════════════════════════════════════
+           ENVIRONMENT
+        ═══════════════════════════════════════════════ */
+        function setupEnvironment() {
             // Ground
-            const ground = new THREE.Mesh(
-                new THREE.PlaneGeometry(100, 100),
-                new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 })
-            );
+            const geo = new THREE.PlaneGeometry(80, 80, 40, 40);
+            const mat = new THREE.MeshStandardMaterial({ color: 0x1a1008, roughness: 0.95, metalness: 0.0 });
+            const ground = new THREE.Mesh(geo, mat);
             ground.rotation.x = -Math.PI / 2;
             ground.receiveShadow = true;
             scene.add(ground);
 
-            const grid = new THREE.GridHelper(40, 40, 0xff3e00, 0x111111);
-            grid.material.opacity = 0.05; grid.material.transparent = true;
+            // Grid
+            const grid = new THREE.GridHelper(80, 60, 0xff4d00, 0x1a1008);
+            grid.position.y = 0.01;
+            grid.material.opacity = 0.15;
+            grid.material.transparent = true;
             scene.add(grid);
 
-            loadModel();
-
-            window.addEventListener('resize', onResize);
-            animate();
+            // Crowd torches (point lights in distance)
+            const torchColors = [0xff6600, 0xffaa00, 0xff3300];
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const pl = new THREE.PointLight(torchColors[i % 3], 5, 15);
+                pl.position.set(Math.cos(angle) * 14, 3, Math.sin(angle) * 14);
+                scene.add(pl);
+            }
         }
 
-        function loadModel() {
-            const loader = new GLTFLoader();
-            const status = document.getElementById('loader-status');
+        /* ═══════════════════════════════════════════════
+           DUST PARTICLE SYSTEM
+        ═══════════════════════════════════════════════ */
+        function setupDust() {
+            dustPositions = new Float32Array(DUST_COUNT * 3);
+            dustVelocities = [];
+            dustLifetimes = new Float32Array(DUST_COUNT);
 
-            loader.load('./bull.glb', (gltf) => {
-                model = gltf.scene;
-
-                // Centering & Scaling
-                const box = new THREE.Box3().setFromObject(model);
-                const size = box.getSize(new THREE.Vector3());
-                model.scale.setScalar(3.5 / size.y);
-                const boxAdjusted = new THREE.Box3().setFromObject(model);
-                model.position.y = -boxAdjusted.min.y;
-                model.rotation.y = Math.PI;
-
-                model.traverse(node => { if (node.isMesh) node.castShadow = node.receiveShadow = true; });
-                scene.add(model);
-
-                // Animations
-                mixer = new THREE.AnimationMixer(model);
-                const grid = document.getElementById('glb-btn-grid');
-
-                gltf.animations.forEach((clip, i) => {
-                    const action = mixer.clipAction(clip);
-                    actions[clip.name] = action;
-
-                    const btn = document.createElement('button');
-                    btn.className = 'btn';
-                    btn.innerText = clip.name || `Clip ${i + 1}`;
-                    btn.onclick = () => playClip(clip.name, btn);
-                    grid.appendChild(btn);
-
-                    if (i === 0) { btn.classList.add('active'); action.play(); activeAction = action; }
-                });
-
-                document.getElementById('loader').classList.add('hidden');
-            },
-                (xhr) => { status.innerText = `Loading: ${Math.round(xhr.loaded / xhr.total * 100)}%`; },
-                (err) => { status.innerText = "Error Loading Model"; status.style.color = "red"; });
-        }
-
-        function playClip(name, btn) {
-            if (isPerforming) return;
-            const next = actions[name];
-            if (activeAction === next) return;
-
-            document.querySelectorAll('#glb-btn-grid .btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            if (activeAction) activeAction.fadeOut(0.4);
-            next.reset().fadeIn(0.4).play();
-            activeAction = next;
-        }
-
-        // Action Logic (Simplified Procedural)
-        window.runAction = async (type) => {
-            if (isPerforming || !model) return;
-            isPerforming = true;
-
-            const statusText = document.getElementById('status-text');
-            const statusContainer = document.getElementById('status-container');
-            const fxLabel = document.getElementById('fx-label');
-            const flashEl = document.getElementById('flash');
-
-            statusText.innerText = type === 'charge' ? "CHARGING" : "KICKING";
-            statusContainer.classList.add('active-status');
-
-            if (activeAction) activeAction.fadeOut(0.2);
-
-            if (type === 'charge') {
-                fxLabel.innerText = "CHARGE";
-                // Windup
-                const startPos = model.position.clone();
-                for (let i = 0; i < 30; i++) {
-                    model.rotation.x += 0.01;
-                    await sleep(10);
-                }
-
-                // Attack
-                fxLabel.style.opacity = 1;
-                flashEl.style.opacity = 0.5;
-                setTimeout(() => { flashEl.style.opacity = 0; }, 50);
-                shake = 0.4;
-
-                for (let i = 0; i < 20; i++) {
-                    model.position.z -= 0.5;
-                    model.rotation.x -= 0.04;
-                    await sleep(16);
-                }
-
-                // Recovery
-                statusText.innerText = "RECOVERING";
-                await sleep(500);
-                model.position.copy(startPos);
-                model.rotation.x = 0;
-            } else {
-                fxLabel.innerText = "KICK";
-                // Lean
-                for (let i = 0; i < 20; i++) {
-                    model.rotation.x -= 0.015;
-                    await sleep(16);
-                }
-                // Snap
-                fxLabel.style.opacity = 1;
-                flashEl.style.opacity = 0.8;
-                flashEl.style.backgroundColor = "#7b00ff";
-                setTimeout(() => { flashEl.style.opacity = 0; }, 80);
-                shake = 0.6;
-
-                for (let i = 0; i < 10; i++) {
-                    model.rotation.x += 0.06;
-                    await sleep(10);
-                }
-                await sleep(600);
-                model.rotation.x = 0;
+            for (let i = 0; i < DUST_COUNT; i++) {
+                dustPositions[i * 3] = 9999; // park off-screen
+                dustPositions[i * 3 + 1] = 0;
+                dustPositions[i * 3 + 2] = 9999;
+                dustVelocities.push(new THREE.Vector3());
+                dustLifetimes[i] = 0;
             }
 
-            fxLabel.style.opacity = 0;
-            if (activeAction) activeAction.fadeIn(0.5).play();
+            dustGeo = new THREE.BufferGeometry();
+            dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
 
-            statusText.innerText = "STANDING BY";
-            statusContainer.classList.remove('active-status');
-            isPerforming = false;
+            const mat = new THREE.PointsMaterial({
+                color: 0xc8a060, size: 0.12, transparent: true, opacity: 0.7,
+                depthWrite: false, sizeAttenuation: true
+            });
+
+            dustMesh = new THREE.Points(dustGeo, mat);
+            scene.add(dustMesh);
+        }
+
+        function spawnDustBurst(origin, count = 60) {
+            let spawned = 0;
+            for (let i = 0; i < DUST_COUNT && spawned < count; i++) {
+                if (dustLifetimes[i] <= 0) {
+                    dustPositions[i * 3] = origin.x + (Math.random() - .5) * 1.2;
+                    dustPositions[i * 3 + 1] = origin.y + Math.random() * 0.3;
+                    dustPositions[i * 3 + 2] = origin.z + (Math.random() - .5) * 1.2;
+                    dustVelocities[i].set(
+                        (Math.random() - .5) * 2.5,
+                        Math.random() * 2 + 0.5,
+                        (Math.random() - .5) * 2.5
+                    );
+                    dustLifetimes[i] = 0.8 + Math.random() * 0.8;
+                    spawned++;
+                }
+            }
+            dustGeo.attributes.position.needsUpdate = true;
+        }
+
+        function updateDust(dt) {
+            let changed = false;
+            for (let i = 0; i < DUST_COUNT; i++) {
+                if (dustLifetimes[i] > 0) {
+                    dustLifetimes[i] -= dt;
+                    dustPositions[i * 3] += dustVelocities[i].x * dt;
+                    dustPositions[i * 3 + 1] += dustVelocities[i].y * dt;
+                    dustPositions[i * 3 + 2] += dustVelocities[i].z * dt;
+                    dustVelocities[i].y -= 3 * dt; // gravity
+                    if (dustLifetimes[i] <= 0) {
+                        dustPositions[i * 3] = dustPositions[i * 3 + 2] = 9999;
+                    }
+                    changed = true;
+                }
+            }
+            if (changed) dustGeo.attributes.position.needsUpdate = true;
+        }
+
+        /* ═══════════════════════════════════════════════
+           LOAD BULL MODEL
+        ═══════════════════════════════════════════════ */
+        function loadBull() {
+            const loader = new GLTFLoader();
+            const fill = document.getElementById('progress-fill');
+            const txt = document.getElementById('loader-text');
+
+            loader.load('./bull.glb',
+                (gltf) => {
+                    bullModel = gltf.scene;
+
+                    // Fit to ground
+                    const box = new THREE.Box3().setFromObject(bullModel);
+                    const size = box.getSize(new THREE.Vector3());
+                    const center = box.getCenter(new THREE.Vector3());
+
+                    // Auto-scale: target ~3 units tall
+                    const targetH = 3;
+                    const scale = targetH / size.y;
+                    bullModel.scale.setScalar(scale);
+
+                    // Re-compute after scale
+                    const box2 = new THREE.Box3().setFromObject(bullModel);
+                    bullModel.position.y = -box2.min.y;
+                    bullModel.position.x = 0;
+                    bullModel.position.z = 0;
+                    bullModel.rotation.y = Math.PI; // face camera
+
+                    bullModel.traverse(c => {
+                        if (c.isMesh) {
+                            c.castShadow = c.receiveShadow = true;
+                            if (c.material) { c.material.roughness = 0.65; c.material.metalness = 0.05; }
+                        }
+                    });
+
+                    scene.add(bullModel);
+                    bullStartPos = bullModel.position.clone();
+
+                    // ── Build invisible leg-bone proxies attached to bull ──
+                    legBoneL = new THREE.Object3D();
+                    legBoneR = new THREE.Object3D();
+                    hoofBoneL = new THREE.Object3D();
+                    hoofBoneR = new THREE.Object3D();
+
+                    const bh = new THREE.Box3().setFromObject(bullModel).getSize(new THREE.Vector3());
+                    const legOffsetX = bh.x * 0.22;
+                    const legOffsetZ = bh.z * 0.38;
+                    const legOffsetY = bh.y * 0.35;
+                    const hoofDropY = bh.y * 0.35;
+
+                    legBoneL.position.set(-legOffsetX, legOffsetY, legOffsetZ);
+                    legBoneR.position.set(legOffsetX, legOffsetY, legOffsetZ);
+                    hoofBoneL.position.set(0, -hoofDropY, 0);
+                    hoofBoneR.position.set(0, -hoofDropY, 0);
+
+                    legBoneL.add(hoofBoneL);
+                    legBoneR.add(hoofBoneR);
+                    bullModel.add(legBoneL);
+                    bullModel.add(legBoneR);
+
+                    // GLB animations
+                    if (gltf.animations?.length) {
+                        mixer = new THREE.AnimationMixer(bullModel);
+                        const panel = document.getElementById('anim-panel');
+
+                        gltf.animations.forEach((clip, i) => {
+                            const action = mixer.clipAction(clip);
+                            glbAnims.set(clip.name, action);
+
+                            const btn = document.createElement('button');
+                            btn.className = 'btn';
+                            btn.innerHTML = `◈ ${clip.name || 'Anim ' + (i + 1)}`;
+                            btn.onclick = () => {
+                                playGLBAnim(clip.name);
+                                document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+                                btn.classList.add('active');
+                            };
+                            panel.appendChild(btn);
+
+                            if (i === 0) { btn.classList.add('active'); playGLBAnim(clip.name); }
+                        });
+                    } else {
+                        startIdleBreathing();
+                    }
+
+                    document.getElementById('loader').classList.add('hidden');
+                },
+                (xhr) => {
+                    const p = xhr.total ? (xhr.loaded / xhr.total) * 100 : 0;
+                    fill.style.width = p + '%';
+                    txt.innerText = `Loading: ${Math.round(p)}%`;
+                },
+                (err) => {
+                    console.error(err);
+                    txt.innerText = 'ERROR: bull.glb not found!';
+                    txt.style.color = 'red';
+                }
+            );
+        }
+
+        /* ═══════════════════════════════════════════════
+           ANIMATION CONTROLS
+        ═══════════════════════════════════════════════ */
+        let activeGLBAnim = null;
+        function playGLBAnim(name) {
+            const next = glbAnims.get(name);
+            if (!next || activeGLBAnim === next) return;
+            if (activeGLBAnim) activeGLBAnim.fadeOut(0.3);
+            next.reset().fadeIn(0.3).play();
+            activeGLBAnim = next;
+        }
+
+        let idleActive = false;
+        function startIdleBreathing() { idleActive = true; }
+
+        function applyIdleBreathing(t) {
+            if (!idleActive || !bullModel || chargeState !== 'idle' || kickState !== 'idle') return;
+            const s = 1 + Math.sin(t * 1.5) * 0.008;
+            bullModel.scale.y = (3 / (new THREE.Box3().setFromObject(bullModel).getSize(new THREE.Vector3()).y || 1)) * s;
+            bullModel.rotation.y = Math.PI + Math.sin(t * 0.4) * 0.04;
+        }
+
+        /* ═══════════════════════════════════════════════
+           ⚡ CHARGE SYSTEM
+        ═══════════════════════════════════════════════ */
+        window.triggerCharge = function () {
+            if (chargeState !== 'idle' || kickState !== 'idle' || !bullModel) return;
+            document.getElementById('charge-btn').disabled = true;
+            setStatus('WINDING UP...', true);
+            chargeState = 'windup';
+            chargeT = 0;
+            chargeDir.set(0, 0, -1);
+            bullStartPos = bullModel.position.clone();
+            bullTargetPos = bullModel.position.clone().addScaledVector(chargeDir, 18);
+            originalCamPos = camera.position.clone();
+            originalCamTarget = controls.target.clone();
         };
 
-        function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+        function updateCharge(dt) {
+            if (!bullModel || chargeState === 'idle') return;
+            chargeT += dt;
 
-        function onResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            if (chargeState === 'windup') {
+                const t = Math.min(chargeT / 1.2, 1);
+                bullModel.rotation.x = THREE.MathUtils.lerp(0, 0.35, easeInOut(t));
+                bullModel.position.z = bullStartPos.z + Math.sin(t * Math.PI) * 0.3;
+                if (Math.random() < 0.15) {
+                    const hoofPos = bullModel.position.clone();
+                    hoofPos.y = 0.05;
+                    spawnDustBurst(hoofPos, 8);
+                }
+                if (chargeT >= 1.2) {
+                    chargeState = 'sprint';
+                    chargeT = 0;
+                    setStatus('CHARGING!', true);
+                    flashScreen(0.6, '#ff3e00');
+                    showLabel('charge-label');
+                    shakeIntensity = 0.25;
+                }
+            }
+            else if (chargeState === 'sprint') {
+                const t = Math.min(chargeT / 1.4, 1);
+                const ease = easeIn(t);
+                bullModel.position.lerpVectors(bullStartPos, bullTargetPos, ease);
+                bullModel.rotation.x = THREE.MathUtils.lerp(0.35, -0.1, ease);
+                bullModel.position.y = bullStartPos.y + Math.abs(Math.sin(chargeT * 14)) * 0.12;
+                if (Math.random() < 0.6) {
+                    const trail = bullModel.position.clone();
+                    trail.y = 0.05;
+                    spawnDustBurst(trail, 12);
+                }
+                const camPull = camera.position.clone();
+                camPull.z = originalCamPos.z + ease * 3;
+                camera.position.lerp(camPull, 0.08);
+                shakeIntensity = 0.3 - ease * 0.2;
+                if (chargeT >= 1.4) {
+                    chargeState = 'brake';
+                    chargeT = 0;
+                    setStatus('IMPACT!', true);
+                    flashScreen(1.0, '#ff3e00');
+                    shakeIntensity = 0.5;
+                    spawnDustBurst(bullModel.position, 120);
+                }
+            }
+            else if (chargeState === 'brake') {
+                const t = Math.min(chargeT / 0.8, 1);
+                bullModel.rotation.x = THREE.MathUtils.lerp(-0.1, 0, easeOut(t));
+                shakeIntensity = THREE.MathUtils.lerp(0.5, 0, t);
+                if (chargeT >= 0.8) {
+                    chargeState = 'reset';
+                    chargeT = 0;
+                    setStatus('RESETTING...', false);
+                }
+            }
+            else if (chargeState === 'reset') {
+                const t = Math.min(chargeT / 1.5, 1);
+                bullModel.position.lerpVectors(bullModel.position.clone(), bullStartPos, easeInOut(t) * 0.08);
+                bullModel.rotation.x = THREE.MathUtils.lerp(bullModel.rotation.x, 0, 0.1);
+                camera.position.lerp(originalCamPos, 0.05);
+                controls.target.lerp(originalCamTarget, 0.05);
+                if (chargeT >= 1.5 && bullModel.position.distanceTo(bullStartPos) < 0.1) {
+                    bullModel.position.copy(bullStartPos);
+                    bullModel.rotation.x = 0;
+                    chargeState = 'idle';
+                    setStatus('IDLE', false);
+                    document.getElementById('charge-btn').disabled = false;
+                }
+            }
         }
+
+        /* ═══════════════════════════════════════════════
+           🦵 BACK KICK SYSTEM
+        ═══════════════════════════════════════════════ */
+        window.triggerKick = function () {
+            if (kickState !== 'idle' || chargeState !== 'idle' || !bullModel) return;
+            document.getElementById('kick-btn').disabled = true;
+            setStatus('KICK WINDUP...', true);
+            kickState = 'lean';
+            kickT = 0;
+            kickStartRotX = bullModel.rotation.x;
+        };
+
+        function updateKick(dt) {
+            if (!bullModel || kickState === 'idle') return;
+            kickT += dt;
+
+            if (kickState === 'lean') {
+                const t = Math.min(kickT / 0.5, 1);
+                bullModel.rotation.x = THREE.MathUtils.lerp(kickStartRotX, -0.28, easeInOut(t));
+                if (legBoneL) {
+                    legBoneL.rotation.x = THREE.MathUtils.lerp(0, -0.5, easeInOut(t));
+                    legBoneR.rotation.x = THREE.MathUtils.lerp(0, -0.5, easeInOut(t));
+                }
+                if (kickT >= 0.5) { kickState = 'lift'; kickT = 0; setStatus('LIFTING LEGS!', true); }
+            }
+            else if (kickState === 'lift') {
+                const t = Math.min(kickT / 0.45, 1);
+                if (legBoneL) {
+                    legBoneL.rotation.x = THREE.MathUtils.lerp(-0.5, -1.4, easeOut(t));
+                    legBoneR.rotation.x = THREE.MathUtils.lerp(-0.5, -1.4, easeOut(t));
+                    if (hoofBoneL) {
+                        hoofBoneL.rotation.x = THREE.MathUtils.lerp(0, 1.1, easeOut(t));
+                        hoofBoneR.rotation.x = THREE.MathUtils.lerp(0, 1.1, easeOut(t));
+                    }
+                }
+                if (kickT >= 0.45) { kickState = 'snap'; kickT = 0; setStatus('KICKING!', true); }
+            }
+            else if (kickState === 'snap') {
+                const t = Math.min(kickT / 0.22, 1);
+                if (legBoneL) {
+                    legBoneL.rotation.x = THREE.MathUtils.lerp(-1.4, 0.9, easeIn(t));
+                    legBoneR.rotation.x = THREE.MathUtils.lerp(-1.4, 0.9, easeIn(t));
+                    if (hoofBoneL) {
+                        hoofBoneL.rotation.x = THREE.MathUtils.lerp(1.1, -0.3, easeIn(t));
+                        hoofBoneR.rotation.x = THREE.MathUtils.lerp(1.1, -0.3, easeIn(t));
+                    }
+                }
+                bullModel.rotation.x = THREE.MathUtils.lerp(-0.28, 0.18, easeIn(t));
+                if (kickT >= 0.12 && kickT < 0.14) {
+                    flashScreen(0.7, '#7b00ff');
+                    showLabel('kick-label');
+                    shakeIntensity = 0.55;
+                    if (hoofBoneL) {
+                        const wL = new THREE.Vector3(); const wR = new THREE.Vector3();
+                        hoofBoneL.getWorldPosition(wL); wL.y = 0.05;
+                        hoofBoneR.getWorldPosition(wR); wR.y = 0.05;
+                        spawnDustBurst(wL, 80); spawnDustBurst(wR, 80);
+                        spawnHoofTrail(wL); spawnHoofTrail(wR);
+                    }
+                }
+                if (kickT >= 0.22) { kickState = 'recoil'; kickT = 0; setStatus('RECOIL!', true); }
+            }
+            else if (kickState === 'recoil') {
+                const t = Math.min(kickT / 0.5, 1);
+                if (legBoneL) {
+                    legBoneL.rotation.x = THREE.MathUtils.lerp(0.9, 0, easeOut(t));
+                    legBoneR.rotation.x = THREE.MathUtils.lerp(0.9, 0, easeOut(t));
+                    if (hoofBoneL) {
+                        hoofBoneL.rotation.x = THREE.MathUtils.lerp(-0.3, 0, easeOut(t));
+                        hoofBoneR.rotation.x = THREE.MathUtils.lerp(-0.3, 0, easeOut(t));
+                    }
+                }
+                bullModel.rotation.x = THREE.MathUtils.lerp(0.18, kickStartRotX, easeOut(t));
+                shakeIntensity = THREE.MathUtils.lerp(0.55, 0, t);
+                if (kickT >= 0.5) { kickState = 'settle'; kickT = 0; setStatus('SETTLING...', false); }
+            }
+            else if (kickState === 'settle') {
+                const t = Math.min(kickT / 0.6, 1);
+                bullModel.rotation.x = THREE.MathUtils.lerp(bullModel.rotation.x, kickStartRotX, easeInOut(t) * 0.15);
+                if (kickT >= 0.6) {
+                    bullModel.rotation.x = kickStartRotX;
+                    kickState = 'idle';
+                    setStatus('IDLE', false);
+                    document.getElementById('kick-btn').disabled = false;
+                }
+            }
+        }
+
+        /* ═══════════════════════════════════════════════
+           VISUAL EFFECTS HELPERS
+        ═══════════════════════════════════════════════ */
+        function applyCameraShake() {
+            if (shakeIntensity <= 0) return;
+            camera.position.x += (Math.random() - .5) * shakeIntensity * 0.15;
+            camera.position.y += (Math.random() - .5) * shakeIntensity * 0.08;
+            shakeIntensity *= 0.88;
+            if (shakeIntensity < 0.005) shakeIntensity = 0;
+        }
+
+        function flashScreen(intensity, color) {
+            const flash = document.getElementById('flash');
+            flash.style.background = color || '#ff3e00';
+            flash.style.opacity = intensity;
+            setTimeout(() => { flash.style.opacity = 0; }, 90);
+        }
+
+        function showLabel(id) {
+            const lbl = document.getElementById(id);
+            lbl.style.opacity = 1;
+            setTimeout(() => { lbl.style.opacity = 0; }, 700);
+        }
+
+        function spawnHoofTrail(worldPos) {
+            const v = worldPos.clone().project(camera);
+            const x = (v.x * 0.5 + 0.5) * innerWidth;
+            const y = (-v.y * 0.5 + 0.5) * innerHeight;
+            for (let i = 0; i < 6; i++) {
+                const el = document.createElement('div');
+                el.className = 'hoof-trail';
+                el.style.left = (x + (Math.random() - .5) * 60) + 'px';
+                el.style.top = (y + (Math.random() - .5) * 60) + 'px';
+                document.getElementById('scene-container').appendChild(el);
+                setTimeout(() => el.remove(), 600);
+            }
+        }
+
+        function setStatus(text, active) {
+            document.getElementById('status-text').innerText = text;
+            const badge = document.getElementById('status-badge');
+            active ? badge.classList.add('charging') : badge.classList.remove('charging');
+        }
+
+        const easeIn = t => t * t * t;
+        const easeOut = t => 1 - Math.pow(1 - t, 3);
+        const easeInOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
         function animate() {
             requestAnimationFrame(animate);
-            const delta = clock.getDelta();
-            if (mixer) mixer.update(delta);
+            const dt = Math.min(clock.getDelta(), 0.05);
+            const t = clock.elapsedTime;
+            if (mixer) mixer.update(dt);
             controls.update();
-
-            if (shake > 0) {
-                camera.position.x += (Math.random() - 0.5) * shake;
-                camera.position.y += (Math.random() - 0.5) * shake;
-                shake *= 0.9;
-            }
-
+            updateDust(dt);
+            updateCharge(dt);
+            updateKick(dt);
+            applyCameraShake();
+            applyIdleBreathing(t);
             renderer.render(scene, camera);
         }
     </script>
